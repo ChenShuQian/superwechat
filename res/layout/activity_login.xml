@@ -10,12 +10,15 @@
         android:layout_height="0dip"
         android:layout_weight="1" >
 
-        <ImageView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
-            android:src="@drawable/welcom_logo" />
+            android:text="超级微信"
+            android:textColor="#000"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/mobile"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -105,7 +108,7 @@
                 android:onClick="register"
                 android:paddingBottom="7dp"
                 android:paddingTop="7dp"
-                android:text="@string/register"
+                android:text="注册"
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
 
@@ -120,10 +123,18 @@
                 android:onClick="login"
                 android:paddingBottom="7dp"
                 android:paddingTop="7dp"
-                android:text="@string/login"
+                android:text="登录"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
         </LinearLayout>
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="设置服务器的IP地址"
+        android:textColor="#000"
+        android:gravity="center_horizontal"/>
 
 </LinearLayout>
