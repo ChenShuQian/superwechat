@@ -180,22 +180,24 @@ public class LoginActivity extends BaseActivity {
 	}
 
 	private void loginAppSever() {
-		OkHttpUtils2<Result> utils2 = new OkHttpUtils2<>();
+		OkHttpUtils2<String> utils2 = new OkHttpUtils2<>();
 		utils2.setRequestUrl(I.REQUEST_LOGIN)
 				.addParam(I.User.USER_NAME,currentUsername)
 				.addParam(I.User.PASSWORD,currentPassword)
-				.targetClass(Result.class)
-				.execute(new OkHttpUtils2.OnCompleteListener<Result>() {
+				.targetClass(String.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
 					@Override
-					public void onSuccess(Result result) {
-						if (result != null && result.isRetMsg()) {
-							loginSuccess();
-							String json = result.getRetData().toString();
-							Gson gson = new Gson();
-							UserAvatar user = gson.fromJson(json, UserAvatar.class);
-							saveUserToDB(user);
+					public void onSuccess(String s) {
+						Object result = Utils.getResultFromJson(s, UserAvatar.class);
+						if (result != null) {
+							UserAvatar user = (UserAvatar) result;
+							if (user != null) {
+								saveUserToDB(user);
+								loginSuccess(user);
+							}
 						} else {
-							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed)+ Utils.getResourceString(LoginActivity.this,result.getRetCode()), Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed)+
+									Utils.getResourceString(LoginActivity.this, (Integer) result), Toast.LENGTH_SHORT).show();
 						}
 					}
 
@@ -209,17 +211,16 @@ public class LoginActivity extends BaseActivity {
 	}
 
 	private void saveUserToDB(UserAvatar user) {
-		if (user != null) {
-			// 存入db
-			UserDao dao = new UserDao(LoginActivity.this);
-			dao.saveUserAvatar(user);
-		}
+		// 存入db
+		UserDao dao = new UserDao(LoginActivity.this);
+		dao.saveUserAvatar(user);
 	}
 
-	private void loginSuccess() {
+	private void loginSuccess(UserAvatar user) {
 		// 登陆成功，保存用户名密码
 		DemoApplication.getInstance().setUserName(currentUsername);
 		DemoApplication.getInstance().setPassword(currentPassword);
+		DemoApplication.currentUserNick = user.getMUserNick();
 
 		try {
 			// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
