@@ -177,6 +177,7 @@
                 android:layout_toLeftOf="@id/iv_avatar"
                 android:background="@null"
                 android:clickable="false"
+                android:enabled="false"
                 android:hint="头像"
                 android:paddingLeft="10dip"
                 android:singleLine="true"
