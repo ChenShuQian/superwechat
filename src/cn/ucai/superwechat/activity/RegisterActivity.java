@@ -32,6 +32,7 @@ import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.listener.OnSetAvatarListener;
 import cn.ucai.superwechat.utils.OkHttpUtils2;
+import cn.ucai.superwechat.utils.Utils;
 
 import com.easemob.exceptions.EaseMobException;
 
@@ -159,7 +160,7 @@ public class RegisterActivity extends BaseActivity {
 	private void registerAppSever() {
 		File file = new File(OnSetAvatarListener.getAvatarPath(RegisterActivity.this, I.AVATAR_TYPE_USER_PATH)
 				, avatarName + I.AVATAR_SUFFIX_JPG);
-		OkHttpUtils2<Result> utils2 = new OkHttpUtils2<>();
+		final OkHttpUtils2<Result> utils2 = new OkHttpUtils2<>();
 		utils2.setRequestUrl(I.REQUEST_REGISTER)
 				.addParam(I.User.USER_NAME,username)
 				.addParam(I.User.PASSWORD,pwd)
@@ -173,7 +174,7 @@ public class RegisterActivity extends BaseActivity {
 							registerEMServer();
 						} else {
 							pd.dismiss();
-							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed), Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed)+ Utils.getResourceString(RegisterActivity.this,result.getRetCode()), Toast.LENGTH_SHORT).show();
 						}
 					}
 
@@ -181,6 +182,7 @@ public class RegisterActivity extends BaseActivity {
 					public void onError(String error) {
 						pd.dismiss();
 						unRegisterAppServer();
+						Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed), Toast.LENGTH_SHORT).show();
 					}
 				});
 	}

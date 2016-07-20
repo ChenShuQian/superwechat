@@ -4,6 +4,7 @@ public interface I {
 	String SERVER_ROOT = "http://10.0.2.2:8080/SuperWeChatServer/Server";
 	String QUESTION = "?";
 	String EQL = "=";
+	String MSG_PREFIX_MSG = "msg_";
 
 	interface User {
 		String TABLE_NAME							=		"t_superwechat_user";
