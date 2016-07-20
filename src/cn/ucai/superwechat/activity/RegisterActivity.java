@@ -17,6 +17,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -179,6 +180,7 @@ public class RegisterActivity extends BaseActivity {
 					@Override
 					public void onError(String error) {
 						pd.dismiss();
+						unRegisterAppServer();
 					}
 				});
 	}
@@ -221,6 +223,24 @@ public class RegisterActivity extends BaseActivity {
 				}
 			}
 		}).start();
+	}
+
+	private void unRegisterAppServer() {
+		OkHttpUtils2<Result> utils2 = new OkHttpUtils2<>();
+		utils2.setRequestUrl(I.REQUEST_UNREGISTER)
+				.addParam(I.User.USER_NAME,username)
+				.targetClass(Result.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<Result>() {
+					@Override
+					public void onSuccess(Result result) {
+
+					}
+
+					@Override
+					public void onError(String error) {
+
+					}
+				});
 	}
 
 	public void back(View view) {
