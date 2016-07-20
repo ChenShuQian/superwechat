@@ -37,11 +37,14 @@ import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
+import com.google.gson.Gson;
+
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.DemoApplication;
 import cn.ucai.superwechat.DemoHXSDKHelper;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.bean.Result;
+import cn.ucai.superwechat.bean.UserAvatar;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.utils.CommonUtils;
@@ -187,9 +190,12 @@ public class LoginActivity extends BaseActivity {
 					public void onSuccess(Result result) {
 						if (result != null && result.isRetMsg()) {
 							loginSuccess();
+							String json = result.getRetData().toString();
+							Gson gson = new Gson();
+							UserAvatar user = gson.fromJson(json, UserAvatar.class);
+							saveUserToDB(user);
 						} else {
 							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed)+ Utils.getResourceString(LoginActivity.this,result.getRetCode()), Toast.LENGTH_SHORT).show();
-
 						}
 					}
 
@@ -200,7 +206,14 @@ public class LoginActivity extends BaseActivity {
 						Toast.makeText(getApplicationContext(), R.string.Login_failed, Toast.LENGTH_LONG).show();
 					}
 				});
+	}
 
+	private void saveUserToDB(UserAvatar user) {
+		if (user != null) {
+			// 存入db
+			UserDao dao = new UserDao(LoginActivity.this);
+			dao.saveUserAvatar(user);
+		}
 	}
 
 	private void loginSuccess() {
