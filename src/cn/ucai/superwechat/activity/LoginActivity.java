@@ -37,17 +37,15 @@ import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
-import com.google.gson.Gson;
 
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.DemoApplication;
 import cn.ucai.superwechat.DemoHXSDKHelper;
 import cn.ucai.superwechat.R;
-import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.bean.UserAvatar;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.User;
-import cn.ucai.superwechat.task.DownContactListTask;
+import cn.ucai.superwechat.task.DownloadContactListTask;
 import cn.ucai.superwechat.utils.CommonUtils;
 import cn.ucai.superwechat.utils.OkHttpUtils2;
 import cn.ucai.superwechat.utils.Utils;
@@ -223,7 +221,7 @@ public class LoginActivity extends BaseActivity {
 		DemoApplication.getInstance().setPassword(currentPassword);
 		DemoApplication.currentUserNick = user.getMUserNick();
 
-		new DownContactListTask(currentUsername,LoginActivity.this).execute();
+		new DownloadContactListTask(currentUsername,LoginActivity.this).execute();
 		try {
 			// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
 			// ** manually load all local groups and

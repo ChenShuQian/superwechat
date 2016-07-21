@@ -361,7 +361,27 @@ public class DemoDBManager {
 		}
 		return users;
 	}
-    
-    
-    
+
+    /**
+     * 根据用户名查询用户信息
+     * @param username
+     * @return
+     */
+    synchronized public UserAvatar getUserAvatar(String username) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.rawQuery("select * from " + UserDao.USER_TABLE_NAME + " where " + UserDao.USER_COLUMN_NAME_ID + "=?", new String[]{username});
+            UserAvatar users = null;
+            while (cursor.moveToNext()) {
+                users = new UserAvatar();
+                users.setMUserName(username);
+                users.setMUserNick(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_NAME_NICK)));
+                users.setMAvatarId(cursor.getInt(cursor.getColumnIndex(UserDao.USER_COLUMN_NAME_AVATAR)));
+                users.setMAvatarPath(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_PATH)));
+                users.setMAvatarType(cursor.getInt(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_TYPE)));
+                users.setMAvatarLastUpdateTime(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_LAST_UPDATE_TIME)));
+                return users;
+            }
+            cursor.close();
+        return users;
+    }
 }
