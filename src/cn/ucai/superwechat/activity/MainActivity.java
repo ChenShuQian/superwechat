@@ -236,12 +236,12 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                 userlist.put(Constant.CHAT_ROOM, chatRoomItem);
                 
                 // 添加"Robot"
-        		User robotUser = new User();
+/*        		User robotUser = new User();
         		String strRobot = context.getString(R.string.robot_chat);
         		robotUser.setUsername(Constant.CHAT_ROBOT);
         		robotUser.setNick(strRobot);
         		robotUser.setHeader("");
-        		userlist.put(Constant.CHAT_ROBOT, robotUser);
+        		userlist.put(Constant.CHAT_ROBOT, robotUser);*/
         		
                  // 存入内存
                 ((DemoHXSDKHelper)HXSDKHelper.getInstance()).setContactList(userlist);
