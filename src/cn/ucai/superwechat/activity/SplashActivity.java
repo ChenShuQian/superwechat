@@ -58,12 +58,14 @@ public class SplashActivity extends BaseActivity {
 					EMGroupManager.getInstance().loadAllGroups();
 					EMChatManager.getInstance().loadAllConversations();
 					String username = SuperWeChatApplication.getInstance().getUserName();
-					Log.i("main", "-----------------------------------------------------username" + username);
+					Log.i("main", "username" + username);
 					UserDao dao = new UserDao(SplashActivity.this);
 					UserAvatar user = dao.getUserAvatar(username);
 					Log.e(TAG, "user" + user);
-					SuperWeChatApplication.getInstance().setUser(user);
-					SuperWeChatApplication.currentUserNick = user.getMUserNick();
+					if (user != null) {
+						SuperWeChatApplication.getInstance().setUser(user);
+						SuperWeChatApplication.currentUserNick = user.getMUserNick();
+					}
 					new DownloadContactListTask(username,SplashActivity.this).execute();
 					long costTime = System.currentTimeMillis() - start;
 					//等待sleeptime时长

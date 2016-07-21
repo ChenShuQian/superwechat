@@ -114,11 +114,11 @@ public class SuperWeChatApplication extends Application {
 		// 先调用sdk logout，在清理app中自己的数据
 	    hxSDKHelper.logout(isGCM,emCallBack);
 	}
-
+	/**全局的当前登录用户信息*/
 	private UserAvatar user;
-
+	/**全局的当前登录用户的好友集合*/
 	private List<UserAvatar> userList = new ArrayList<>();
-
+	/**全局的当前登录用户的好友MAP集合*/
 	private Map<String, UserAvatar> userMap = new HashMap<String,UserAvatar>();
 
 	public Map<String, UserAvatar> getUserMap() {

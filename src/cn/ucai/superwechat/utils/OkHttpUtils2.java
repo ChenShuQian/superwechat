@@ -267,12 +267,7 @@ public class OkHttpUtils2<T> {
         if (mUrl == null) {
             return this;
         }
-        RequestBody fileBody = RequestBody.create(MediaType.parse(guessMimeType(file.getName())), file);
-
-        mFileBody = new MultipartBuilder()
-                .type(MultipartBuilder.FORM)
-                .addPart(Headers.of("Content-Disposition","form-data; name=\"file\";filename=\""+file.getName()+"\""), fileBody)
-                .build();
+        mFileBody = RequestBody.create(null, file);
         return this;
     }
 

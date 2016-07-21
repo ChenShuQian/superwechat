@@ -34,14 +34,15 @@ import android.widget.Toast;
 import com.easemob.EMCallBack;
 
 import cn.ucai.superwechat.I;
+import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 
 import cn.ucai.superwechat.Constant;
-import cn.ucai.superwechat.DemoApplication;
 import cn.ucai.superwechat.DemoHXSDKHelper;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.bean.UserAvatar;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.User;
@@ -86,8 +87,8 @@ public class LoginActivity extends BaseActivity {
 
 		setListener();
 
-		if (DemoApplication.getInstance().getUserName() != null) {
-			usernameEditText.setText(DemoApplication.getInstance().getUserName());
+		if (SuperWeChatApplication.getInstance().getUserName() != null) {
+			usernameEditText.setText(SuperWeChatApplication.getInstance().getUserName());
 		}
 	}
 
@@ -187,16 +188,16 @@ public class LoginActivity extends BaseActivity {
 				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
 					@Override
 					public void onSuccess(String s) {
-						Object result = Utils.getResultFromJson(s, UserAvatar.class);
-						if (result != null) {
-							UserAvatar user = (UserAvatar) result;
+						Result result = Utils.getResultFromJson(s, UserAvatar.class);
+						if (s != null && result.isRetMsg()) {
+							UserAvatar user = (UserAvatar) result.getRetData();
 							if (user != null) {
 								saveUserToDB(user);
 								loginSuccess(user);
 							}
 						} else {
-							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed)+
-									Utils.getResourceString(LoginActivity.this, (Integer) result), Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed) +
+									Utils.getResourceString(LoginActivity.this, result.getRetCode()), Toast.LENGTH_SHORT).show();
 						}
 					}
 
@@ -217,9 +218,9 @@ public class LoginActivity extends BaseActivity {
 
 	private void loginSuccess(UserAvatar user) {
 		// 登陆成功，保存用户名密码
-		DemoApplication.getInstance().setUserName(currentUsername);
-		DemoApplication.getInstance().setPassword(currentPassword);
-		DemoApplication.currentUserNick = user.getMUserNick();
+		SuperWeChatApplication.getInstance().setUserName(currentUsername);
+		SuperWeChatApplication.getInstance().setPassword(currentPassword);
+		SuperWeChatApplication.currentUserNick = user.getMUserNick();
 
 		new DownloadContactListTask(currentUsername,LoginActivity.this).execute();
 		try {
@@ -243,7 +244,7 @@ public class LoginActivity extends BaseActivity {
 		}
 		// 更新当前用户的nickname 此方法的作用是在ios离线推送时能够显示用户nick
 		boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(
-				DemoApplication.currentUserNick.trim());
+				SuperWeChatApplication.currentUserNick.trim());
 		if (!updatenick) {
 			Log.e("LoginActivity", "update current user nick fail");
 		}
@@ -269,12 +270,12 @@ public class LoginActivity extends BaseActivity {
 
 		userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
 		// 添加"群聊"
-		User groupUser = new User();
+/*		User groupUser = new User();
 		String strGroup = getResources().getString(R.string.group_chat);
 		groupUser.setUsername(Constant.GROUP_USERNAME);
 		groupUser.setNick(strGroup);
 		groupUser.setHeader("");
-		userlist.put(Constant.GROUP_USERNAME, groupUser);
+		userlist.put(Constant.GROUP_USERNAME, groupUser);*/
 		
 		// 添加"Robot"
 /*		User robotUser = new User();

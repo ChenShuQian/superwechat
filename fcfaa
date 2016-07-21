@@ -1,0 +1,89 @@
+[33mcommit e273dd605958eace89008bf3c0921298db2a1401[m
+Author: csa <861842668@qq.com>
+Date:   Thu Jul 21 08:57:10 2016 +0800
+
+    加载用户好友
+
+[33mcommit 872672ee6512cc41879f7b8e5c290420fa48ca7d[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 23:38:49 2016 +0800
+
+    加载好友
+
+[33mcommit f519c8188f5d466adac016bb90407ebb40faa17b[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 15:53:29 2016 +0800
+
+    自动登录
+
+[33mcommit 504c6540033fd9f7f432b31dbf0f1c1cbb9b5d32[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 15:16:17 2016 +0800
+
+    添加Utils工具类，修改登录注册提示信息
+
+[33mcommit 0022116dec832f06a9a5e81274e54ea2fc81ca9f[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 14:56:27 2016 +0800
+
+    取消注册
+
+[33mcommit 5bc27b70ca785b8b0e7209ecdbf694b27e1493c5[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 14:28:24 2016 +0800
+
+    实现登录功能
+
+[33mcommit ebcecb4b1953592dbce5bdde045af1d83704f27a[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 13:26:46 2016 +0800
+
+    实现注册功能
+
+[33mcommit 5b83e32736326e1dd4b7f13c1b840f6200149d81[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 11:10:24 2016 +0800
+
+    添加创建用户表
+
+[33mcommit c97f6042758855907f1d0e832ad3b16f833f7252[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 10:22:55 2016 +0800
+
+    注册界面相关点击事件
+
+[33mcommit 3cee1e881ae5dec22cbd469b1cbe8348ae8e9ec1[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 19 14:52:10 2016 +0800
+
+    使实体类实现可序列化接口
+
+[33mcommit 4fb35567069aaa190e6b242ec976053ed2502929[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 19 14:48:54 2016 +0800
+
+    从服务端添加实体类
+
+[33mcommit b36850273fc165ea9a379cd263e11393a5e66749[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 19 14:47:56 2016 +0800
+
+    添加接口文件
+
+[33mcommit 45de39ef46da79bb743f18a150a9920905699895[m
+Author: csa <861842668@qq.com>
+Date:   Mon Jul 18 19:34:38 2016 +0800
+
+    修改闪屏、登录、注册界面
+
+[33mcommit c12c648b241cbed37d4f873130aca24c9b8876f0[m
+Author: csa <861842668@qq.com>
+Date:   Mon Jul 18 16:14:50 2016 +0800
+
+    添加(applicationId)
+
+[33mcommit e989c6d4c2fe4686e674f0f3a2dfef6c318762ff[m
+Author: csa <861842668@qq.com>
+Date:   Mon Jul 18 15:25:51 2016 +0800
+
+    init code

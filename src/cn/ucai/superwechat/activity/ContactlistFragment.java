@@ -471,8 +471,8 @@ public class ContactlistFragment extends Fragment {
 		// 加入"群聊"和"聊天室"
         if(users.get(Constant.CHAT_ROOM) != null)
             contactList.add(0, users.get(Constant.CHAT_ROOM));
-        if(users.get(Constant.GROUP_USERNAME) != null)
-            contactList.add(0, users.get(Constant.GROUP_USERNAME));
+        /*if(users.get(Constant.GROUP_USERNAME) != null)
+            contactList.add(0, users.get(Constant.GROUP_USERNAME));*/
         
 		// 把"申请与通知"添加到首位
 		if(users.get(Constant.NEW_FRIENDS_USERNAME) != null)
