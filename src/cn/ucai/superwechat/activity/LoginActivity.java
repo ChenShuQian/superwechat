@@ -49,6 +49,7 @@ import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.task.DownloadContactListTask;
 import cn.ucai.superwechat.utils.CommonUtils;
 import cn.ucai.superwechat.utils.OkHttpUtils2;
+import cn.ucai.superwechat.utils.UserUtils;
 import cn.ucai.superwechat.utils.Utils;
 
 /**
@@ -218,6 +219,7 @@ public class LoginActivity extends BaseActivity {
 
 	private void loginSuccess(UserAvatar user) {
 		// 登陆成功，保存用户名密码
+		SuperWeChatApplication.getInstance().setUser(user);
 		SuperWeChatApplication.getInstance().setUserName(currentUsername);
 		SuperWeChatApplication.getInstance().setPassword(currentPassword);
 		SuperWeChatApplication.currentUserNick = user.getMUserNick();

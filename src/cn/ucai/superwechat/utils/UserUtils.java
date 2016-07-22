@@ -96,7 +96,15 @@ public class UserUtils {
 			Picasso.with(context).load(R.drawable.default_avatar).into(imageView);
 		}
 	}
-    
+
+	/**
+     * 设置当前用户头像
+     */
+	public static void setAppCurrentUserAvatar(Context context, ImageView imageView) {
+		String userName = SuperWeChatApplication.getInstance().getUserName();
+		setAppUserAvatar(context,userName,imageView);
+	}
+
     /**
      * 设置用户昵称
      */
@@ -140,10 +148,13 @@ public class UserUtils {
      */
     public static void setAppCurrentUserNick(TextView textView){
 		UserAvatar user = SuperWeChatApplication.getInstance().getUser();
+		Log.i("main", "11111111111111111111111111" + user);
 		if (textView != null && user != null) {
 			if (user.getMUserNick() != null) {
+				Log.i("main", "222222222222222222222222222222" + user.getMUserNick());
 				textView.setText(user.getMUserNick());
 			} else {
+				Log.i("main", "333333333333333333333333333333" + user.getMUserName());
 				textView.setText(user.getMUserName());
 			}
 		}
