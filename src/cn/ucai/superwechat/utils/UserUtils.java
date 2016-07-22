@@ -148,13 +148,11 @@ public class UserUtils {
      */
     public static void setAppCurrentUserNick(TextView textView){
 		UserAvatar user = SuperWeChatApplication.getInstance().getUser();
-		Log.i("main", "11111111111111111111111111" + user);
+		Log.i("main", "user" + user);
 		if (textView != null && user != null) {
 			if (user.getMUserNick() != null) {
-				Log.i("main", "222222222222222222222222222222" + user.getMUserNick());
 				textView.setText(user.getMUserNick());
 			} else {
-				Log.i("main", "333333333333333333333333333333" + user.getMUserName());
 				textView.setText(user.getMUserName());
 			}
 		}

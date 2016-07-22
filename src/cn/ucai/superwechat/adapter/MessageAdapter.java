@@ -810,7 +810,7 @@ public class MessageAdapter extends BaseAdapter{
 								// message.setProgress(0);
 								holder.staus_iv.setVisibility(View.VISIBLE);
 								Toast.makeText(activity,
-										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0)
+										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), Toast.LENGTH_LONG)
 										.show();
 								timer.cancel();
 							}
