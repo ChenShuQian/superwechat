@@ -137,7 +137,9 @@ public class DemoDBManager {
         values.put(UserDao.USER_COLUMN_AVATAR_PATH, user.getMAvatarPath());
         values.put(UserDao.USER_COLUMN_AVATAR_TYPE, user.getMAvatarType());
         values.put(UserDao.USER_COLUMN_AVATAR_LAST_UPDATE_TIME, user.getMAvatarLastUpdateTime());
-        db.replace(UserDao.USER_TABLE_NAME, null, values);
+        if (db.isOpen()) {
+            db.replace(UserDao.USER_TABLE_NAME, null, values);
+        }
     }
     
     public void setDisabledGroups(List<String> groups){
@@ -381,7 +383,6 @@ public class DemoDBManager {
                 users.setMAvatarLastUpdateTime(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_LAST_UPDATE_TIME)));
                 return users;
             }
-            cursor.close();
         return users;
     }
 }
