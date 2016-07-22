@@ -212,7 +212,7 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 					String username = user.getUsername();
 					
 					if(username.contains(prefixString)){
-						if (!username.equals(Constant.GROUP_USERNAME)&&
+						if (!username.equals(Constant.CHAT_ROOM)&&
 								!username.equals(Constant.NEW_FRIENDS_USERNAME)){
 							newValues.add(user);
 						}

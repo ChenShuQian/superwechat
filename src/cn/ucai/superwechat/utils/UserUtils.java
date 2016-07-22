@@ -132,7 +132,22 @@ public class UserUtils {
 			textView.setText(username);
 		}
 	}
-    
+
+	/**
+	 * 设置用户昵称
+	 */
+	public static void setAppCurrentUserNick(UserAvatar user,TextView textView){
+		if(user != null){
+			if (user.getMUserNick() != null) {
+				textView.setText(user.getMUserNick());
+			} else {
+				textView.setText(user.getMUserName());
+			}
+		}else{
+			textView.setText(user.getMUserName());
+		}
+	}
+
     /**
      * 设置当前用户昵称
      */
