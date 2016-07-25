@@ -127,4 +127,12 @@ public class UserDao {
 		UserAvatar userAvatar = DemoDBManager.getInstance().getUserAvatar(username);
 		return userAvatar;
 	}
+
+	/**
+	 * 免登陆时更新数据库中的昵称
+	 * @param user
+     */
+	public void updateUserNick(UserAvatar user) {
+		DemoDBManager.getInstance().updateUserNick(user);
+	}
 }
