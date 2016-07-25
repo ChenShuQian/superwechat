@@ -31,6 +31,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -51,6 +52,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import cn.ucai.superwechat.I;
+import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 
 import com.easemob.chat.EMContactManager;
@@ -58,9 +61,13 @@ import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.DemoHXSDKHelper;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.adapter.ContactAdapter;
+import cn.ucai.superwechat.bean.Result;
+import cn.ucai.superwechat.bean.UserAvatar;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.User;
+import cn.ucai.superwechat.utils.OkHttpUtils2;
+import cn.ucai.superwechat.utils.Utils;
 import cn.ucai.superwechat.widget.Sidebar;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
@@ -289,7 +296,7 @@ public class ContactlistFragment extends Fragment {
 			try {
                 // 删除此联系人
                 deleteContact(toBeProcessUser);
-                // 删除相关的邀请消息
+				// 删除相关的邀请消息
                 InviteMessgeDao dao = new InviteMessgeDao(getActivity());
                 dao.deleteMessage(toBeProcessUser.getUsername());
             } catch (Exception e) {
@@ -302,6 +309,7 @@ public class ContactlistFragment extends Fragment {
 		}
 		return super.onContextItemSelected(item);
 	}
+
 
 	@Override
 	public void onHiddenChanged(boolean hidden) {

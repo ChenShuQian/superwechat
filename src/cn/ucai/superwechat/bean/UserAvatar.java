@@ -114,4 +114,20 @@ public class UserAvatar implements Serializable{
 				+ ", mavatarPath=" + mavatarPath + ", mavatarType=" + mavatarType + ", mavatarLastUpdateTime="
 				+ mavatarLastUpdateTime + "]";
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		UserAvatar that = (UserAvatar) o;
+
+		return muserName != null ? muserName.equals(that.muserName) : that.muserName == null;
+
+	}
+
+	@Override
+	public int hashCode() {
+		return muserName != null ? muserName.hashCode() : 0;
+	}
 }
