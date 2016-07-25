@@ -122,12 +122,12 @@ public class UserAvatar implements Serializable{
 
 		UserAvatar that = (UserAvatar) o;
 
-		return muserName != null ? muserName.equals(that.muserName) : that.muserName == null;
+		return muserName.equals(that.muserName);
 
 	}
 
 	@Override
 	public int hashCode() {
-		return muserName != null ? muserName.hashCode() : 0;
+		return muserName.hashCode();
 	}
 }

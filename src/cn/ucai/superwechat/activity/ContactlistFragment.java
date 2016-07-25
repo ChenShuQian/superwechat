@@ -368,7 +368,30 @@ public class ContactlistFragment extends Fragment {
 
 			}
 		}).start();
+		//删除数据库中的好友关系
+		String currentUserName = SuperWeChatApplication.getInstance().getUserName();
+		OkHttpUtils2<Result> utils2 = new OkHttpUtils2<>();
+		utils2.setRequestUrl(I.REQUEST_DELETE_CONTACT)
+				.addParam(I.Contact.USER_NAME, currentUserName)
+				.addParam(I.Contact.CU_NAME, tobeDeleteUser.getUsername())
+				.targetClass(Result.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<Result>() {
+					@Override
+					public void onSuccess(Result result) {
+						if (result.isRetMsg()) {
+							((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().remove(tobeDeleteUser.getUsername());
+							UserAvatar u = SuperWeChatApplication.getInstance().getUserMap().get(tobeDeleteUser.getUsername());
+							SuperWeChatApplication.getInstance().getUserList().remove(u);
+							SuperWeChatApplication.getInstance().getUserMap().remove(tobeDeleteUser.getUsername());
+							getActivity().sendStickyBroadcast(new Intent("update_contact_list"));
+						}
+					}
 
+					@Override
+					public void onError(String error) {
+						Log.e(TAG, "error" + error);
+					}
+				});
 	}
 
 	/**
