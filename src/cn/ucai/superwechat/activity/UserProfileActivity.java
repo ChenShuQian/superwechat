@@ -33,6 +33,7 @@ import cn.ucai.superwechat.DemoHXSDKHelper;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.bean.UserAvatar;
+import cn.ucai.superwechat.db.UserDao;
 import cn.ucai.superwechat.domain.User;
 import cn.ucai.superwechat.utils.OkHttpUtils2;
 import cn.ucai.superwechat.utils.UserUtils;
@@ -104,6 +105,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			break;
 		case R.id.rl_nickname:
 			final EditText editText = new EditText(this);
+			editText.setText(SuperWeChatApplication.getInstance().getUser().getMUserNick());
 			new AlertDialog.Builder(this).setTitle(R.string.setting_nickname).setIcon(android.R.drawable.ic_dialog_info).setView(editText)
 					.setPositiveButton(R.string.dl_ok, new DialogInterface.OnClickListener() {
 
@@ -140,7 +142,15 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 						Log.e(TAG, "s=" + s);
 						Result result = Utils.getResultFromJson(s, UserAvatar.class);
 						if (result != null && result.isRetMsg()) {
-							updateRemoteNick(nickString);
+							UserAvatar user = (UserAvatar) result.getRetData();
+							if (user != null) {
+								updateRemoteNick(nickString);
+								//修改内存中的昵称
+								SuperWeChatApplication.getInstance().setUser(user);
+								SuperWeChatApplication.currentUserNick = user.getMUserNick();
+								UserDao dao = new UserDao(UserProfileActivity.this);
+								dao.updateUserNick(user);
+							}
 						} else {
 							Toast.makeText(UserProfileActivity.this, getString(R.string.toast_updatenick_fail), Toast.LENGTH_SHORT).show();
 							dialog.dismiss();
