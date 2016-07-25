@@ -581,29 +581,21 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		public void onContactDeleted(final List<String> usernameList) {
 			// 被删除
 			String currentUserName = SuperWeChatApplication.getInstance().getUserName();
-			Map<String, User> localUsers = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList();
-			List<String> toDelUserName = new ArrayList<>();
 			for (final String username : usernameList) {
-				localUsers.remove(username);
-				toDelUserName.add(username);
-				userDao.deleteContact(username);
-				inviteMessgeDao.deleteMessage(username);
-			}
-
-			for (final String name : toDelUserName) {
 				OkHttpUtils2<Result> utils2 = new OkHttpUtils2<>();
 				utils2.setRequestUrl(I.REQUEST_DELETE_CONTACT)
 						.addParam(I.Contact.USER_NAME, currentUserName)
-						.addParam(I.Contact.CU_NAME, name)
+						.addParam(I.Contact.CU_NAME, username)
 						.targetClass(Result.class)
 						.execute(new OkHttpUtils2.OnCompleteListener<Result>() {
 							@Override
 							public void onSuccess(Result result) {
-								Map<String, UserAvatar> userMap = SuperWeChatApplication.getInstance().getUserMap();
-								List<UserAvatar> userList = SuperWeChatApplication.getInstance().getUserList();
-								UserAvatar u = userMap.get(name);
-								userList.remove(u);
-								userMap.remove(name);
+								((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().remove(username);
+								UserAvatar u = SuperWeChatApplication.getInstance().getUserMap().get(username);
+								SuperWeChatApplication.getInstance().getUserList().remove(u);
+								SuperWeChatApplication.getInstance().getUserMap().remove(username);
+								userDao.deleteContact(username);
+								inviteMessgeDao.deleteMessage(username);
 								sendStickyBroadcast(new Intent("update_contact_list"));
 							}
 
@@ -613,6 +605,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 							}
 						});
 			}
+
 			runOnUiThread(new Runnable() {
 				public void run() {
 					// 如果正在与此用户的聊天页面
