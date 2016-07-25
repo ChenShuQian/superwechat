@@ -386,6 +386,10 @@ public class DemoDBManager {
         return users;
     }
 
+    /**
+     * 免登陆时更新数据库中的昵称
+     * @param user
+     */
     synchronized public void updateUserNick(UserAvatar user) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         ContentValues values = new ContentValues();

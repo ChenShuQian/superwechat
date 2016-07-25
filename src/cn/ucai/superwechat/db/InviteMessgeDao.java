@@ -62,10 +62,6 @@ public class InviteMessgeDao {
 		return DemoDBManager.getInstance().getMessagesList();
 	}
 
-	/**
-	 * 免登陆时更新数据库中的昵称
-	 * @param from
-     */
 	public void deleteMessage(String from){
 	    DemoDBManager.getInstance().deleteMessage(from);
 	}
