@@ -15,6 +15,7 @@ package cn.ucai.superwechat.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -42,8 +43,15 @@ import android.widget.Toast;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
+
+import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
+import cn.ucai.superwechat.bean.GroupAvatar;
+import cn.ucai.superwechat.bean.Result;
+import cn.ucai.superwechat.utils.OkHttpUtils2;
 import cn.ucai.superwechat.utils.UserUtils;
+import cn.ucai.superwechat.utils.Utils;
 import cn.ucai.superwechat.widget.ExpandGridView;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
@@ -190,8 +198,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		String st3 = getResources().getString(R.string.chatting_is_dissolution);
 		String st4 = getResources().getString(R.string.are_empty_group_of_news);
 		String st5 = getResources().getString(R.string.is_modify_the_group_name);
-		final String st6 = getResources().getString(R.string.Modify_the_group_name_successful);
-		final String st7 = getResources().getString(R.string.change_the_group_name_failed_please);
 		String st8 = getResources().getString(R.string.Are_moving_to_blacklist);
 		final String st9 = getResources().getString(R.string.failed_to_move_into);
 		
@@ -228,34 +234,12 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 			case REQUEST_CODE_EDIT_GROUPNAME: //修改群名称
 				final String returnData = data.getStringExtra("data");
+				Log.e(TAG, "修改后群名称========" + returnData );
 				if(!TextUtils.isEmpty(returnData)){
 					progressDialog.setMessage(st5);
 					progressDialog.show();
-					
-					new Thread(new Runnable() {
-						public void run() {
-							try {
-							    EMGroupManager.getInstance().changeGroupName(groupId, returnData);
-								runOnUiThread(new Runnable() {
-									public void run() {
-										((TextView) findViewById(R.id.group_name)).setText(returnData + "(" + group.getAffiliationsCount()
-												+ st);
-										progressDialog.dismiss();
-										Toast.makeText(getApplicationContext(), st6, Toast.LENGTH_SHORT).show();
-									}
-								});
-								
-							} catch (EaseMobException e) {
-								e.printStackTrace();
-								runOnUiThread(new Runnable() {
-									public void run() {
-										progressDialog.dismiss();
-										Toast.makeText(getApplicationContext(), st7, Toast.LENGTH_SHORT).show();
-									}
-								});
-							}
-						}
-					}).start();
+					//*******修改数据库中群名称******
+					updateGroupName(returnData);
 				}
 				break;
 			case REQUEST_CODE_ADD_TO_BALCKLIST:
@@ -288,6 +272,61 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				break;
 			}
 		}
+	}
+
+	private void updateGroupName(final String groupName) {
+		final String st6 = getResources().getString(R.string.Modify_the_group_name_successful);
+		final String st7 = getResources().getString(R.string.change_the_group_name_failed_please);
+		final OkHttpUtils2<String> utils2 = new OkHttpUtils2<>();
+		Log.e(TAG, "groupName=" + groupName );
+		Log.e(TAG, "groupId=" + groupId );
+		int groupAvatarId = SuperWeChatApplication.getInstance().getGroupMap().get(groupId).getMGroupId();
+		Log.e(TAG, "groupAvatarId=" + groupAvatarId );
+		utils2.setRequestUrl(I.REQUEST_UPDATE_GROUP_NAME)
+				.addParam(I.Group.GROUP_ID,groupAvatarId+"")
+				.addParam(I.Group.NAME,groupName)
+				.targetClass(String.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+					@Override
+					public void onSuccess(String s) {
+						Log.e(TAG, "s=" + s);
+						Result result = Utils.getResultFromJson(s, GroupAvatar.class);
+						if (result != null && result.isRetMsg()) {
+							new Thread(new Runnable() {
+								public void run() {
+									try {
+										EMGroupManager.getInstance().changeGroupName(groupId, groupName);
+										runOnUiThread(new Runnable() {
+											public void run() {
+												((TextView) findViewById(R.id.group_name)).setText(groupName + "(" + group.getAffiliationsCount() + st);
+												progressDialog.dismiss();
+												Toast.makeText(getApplicationContext(), st6, Toast.LENGTH_SHORT).show();
+											}
+										});
+
+									} catch (EaseMobException e) {
+										e.printStackTrace();
+										runOnUiThread(new Runnable() {
+											public void run() {
+												progressDialog.dismiss();
+												Toast.makeText(getApplicationContext(), st7, Toast.LENGTH_SHORT).show();
+											}
+										});
+									}
+								}
+							}).start();
+						} else {
+							progressDialog.dismiss();
+							Toast.makeText(getApplicationContext(), st7, Toast.LENGTH_SHORT).show();
+						}
+					}
+
+					@Override
+					public void onError(String error) {
+						progressDialog.dismiss();
+						Toast.makeText(getApplicationContext(), st7, Toast.LENGTH_SHORT).show();
+					}
+				});
 	}
 
 	private void refreshMembers(){

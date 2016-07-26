@@ -3,7 +3,9 @@ package cn.ucai.superwechat.task;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.GridView;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +43,15 @@ public class DownloadGroupListTask {
                         Result result = Utils.getListResultFromJson(s, GroupAvatar.class);
                         List<GroupAvatar> list = (List<GroupAvatar>) result.getRetData();
                         if (list != null && list.size() > 0) {
+                            //保存群组到全局变量
                             SuperWeChatApplication.getInstance().setGroupList(list);
+                            Map<String, GroupAvatar> groupMap = new HashMap<String,GroupAvatar>();
+                            for (GroupAvatar groupAvatar : list) {
+                                String groupAvatarUserName = groupAvatar.getMAvatarUserName();
+                                groupMap.put(groupAvatarUserName, groupAvatar);
+                            }
+                            SuperWeChatApplication.getInstance().setGroupMap(groupMap);
+                            Map<String, GroupAvatar> groupMap1 = SuperWeChatApplication.getInstance().getGroupMap();
                             mContext.sendStickyBroadcast(new Intent("update_group_list"));
                         }
                     }
