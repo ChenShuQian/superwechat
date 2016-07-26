@@ -13,6 +13,7 @@
  */
 package cn.ucai.superwechat.activity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -38,6 +40,9 @@ import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import cn.ucai.superwechat.Constant;
 import cn.ucai.superwechat.DemoHXSDKHelper;
@@ -193,6 +198,7 @@ public class LoginActivity extends BaseActivity {
 						if (s != null && result.isRetMsg()) {
 							UserAvatar user = (UserAvatar) result.getRetData();
 							if (user != null) {
+								downloadUserAvatar();
 								saveUserToDB(user);
 								loginSuccess(user);
 							}
@@ -210,6 +216,36 @@ public class LoginActivity extends BaseActivity {
 					}
 				});
 	}
+
+	private void downloadUserAvatar() {
+		OkHttpUtils2<Message> utils2 = new OkHttpUtils2<>();
+		utils2.url(UserUtils.getUserAvatarPath(currentUsername))
+				.targetClass(Message.class)
+				.doInBackground(new Callback() {
+					@Override
+					public void onFailure(Request request, IOException e) {
+						Log.e(TAG, "IOException" + e.getMessage());
+					}
+
+					@Override
+					public void onResponse(Response response) throws IOException {
+						byte[] bytes = response.body().bytes();
+						String avatarUrl = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getUserProfileManager().uploadUserAvatar(bytes);
+						Log.e(TAG, "avatarUrl" + avatarUrl);
+					}
+				}).execute(new OkHttpUtils2.OnCompleteListener<Message>() {
+			@Override
+			public void onSuccess(Message result) {
+				Log.e(TAG, "result" + result);
+			}
+
+			@Override
+			public void onError(String error) {
+				Log.e(TAG, "error" + error);
+			}
+		});
+	}
+
 
 	private void saveUserToDB(UserAvatar user) {
 		// 存入db

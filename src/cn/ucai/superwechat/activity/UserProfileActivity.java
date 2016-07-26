@@ -95,7 +95,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 		if (username == null || username.equals(EMChatManager.getInstance().getCurrentUser())) {
 			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
 			UserUtils.setAppCurrentUserNick(tvNickName);
-			UserUtils.setAppUserAvatar(this, EMChatManager.getInstance().getCurrentUser(), headAvatar);
+			UserUtils.setCurrentUserAvatar(this, headAvatar);
 		} else {
 			tvUsername.setText(username);
 			UserUtils.setAppUserNick(username, tvNickName);
@@ -234,23 +234,11 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 		return avatarName;
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode != RESULT_OK) {
-			return;
-		}
-		mOnSetAvatarListener.setAvatar(requestCode, data, headAvatar);
-		if (requestCode == OnSetAvatarListener.REQUEST_CROP_PHOTO) {
-			updateUserAvatar();
-		}
-	}
-
 	/**
 	 * 更新数据库中的头像
 	 */
 	private void updateUserAvatar() {
-		File file = new File(OnSetAvatarListener.getAvatarPath(UserProfileActivity.this, I.AVATAR_TYPE_USER_PATH)
+		final File file = new File(OnSetAvatarListener.getAvatarPath(UserProfileActivity.this, I.AVATAR_TYPE_USER_PATH)
 				, avatarName + I.AVATAR_SUFFIX_JPG);
 		String userName = SuperWeChatApplication.getInstance().getUserName();
 		OkHttpUtils2<Result> utils2 = new OkHttpUtils2<>();
@@ -265,6 +253,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 						if (result.isRetMsg()) {
 							Toast.makeText(UserProfileActivity.this, getString(R.string.toast_updatenick_success), Toast.LENGTH_SHORT)
 									.show();
+							dialog.dismiss();
 						}
 					}
 
@@ -309,7 +298,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 		}).start();
 	}
 
-/*	@Override
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
 		case REQUESTCODE_PICK:
@@ -327,7 +316,16 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			break;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
-	}*/
+		if (resultCode != RESULT_OK) {
+			return;
+		}
+		mOnSetAvatarListener.setAvatar(requestCode, data, headAvatar);
+		if (requestCode == OnSetAvatarListener.REQUEST_CROP_PHOTO) {
+			dialog = ProgressDialog.show(this, getString(R.string.dl_update_photo), getString(R.string.dl_waiting));
+			dialog.show();
+			updateUserAvatar();
+		}
+	}
 
 	public void startPhotoZoom(Uri uri) {
 		Intent intent = new Intent("com.android.camera.action.CROP");
