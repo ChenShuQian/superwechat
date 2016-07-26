@@ -160,7 +160,7 @@ public class NewGroupActivity extends BaseActivity {
 		}).start();
 	}
 
-	private void createAppGroup(String groupId, String groupName, String desc, String[] members) {
+	private void createAppGroup(final String groupId, String groupName, String desc, final String[] members) {
 		boolean isPublic = checkBox.isChecked();
 		boolean invites = !isPublic;
 		String owner = SuperWeChatApplication.getInstance().getUserName();
@@ -183,6 +183,52 @@ public class NewGroupActivity extends BaseActivity {
 						Result result = Utils.getResultFromJson(s, GroupAvatar.class);
 						Log.e(TAG, "result=" + result);
 						if (result != null && result.isRetMsg()) {
+							//******添加群组成员******
+							if (members != null && members.length > 0) {
+								addGroupMembers(groupId,members);
+							} else {
+								runOnUiThread(new Runnable() {
+									public void run() {
+										progressDialog.dismiss();
+										setResult(RESULT_OK);
+										finish();
+									}
+								});
+							}
+						} else {
+							progressDialog.dismiss();
+						}
+					}
+
+					@Override
+					public void onError(String error) {
+						progressDialog.dismiss();
+						Log.e(TAG, "error=" + error);
+					}
+				});
+
+	}
+
+	private void addGroupMembers(String groupId, String[] members) {
+		Log.e(TAG, "members=" + members.toString());
+		String memberNames = "";
+		for (String m : members) {
+			memberNames += m + ",";
+		}
+		memberNames = memberNames.substring(0, memberNames.length() - 1);
+		Log.e(TAG, "memberNames=" + memberNames);
+		final OkHttpUtils2<String> utils2 = new OkHttpUtils2<>();
+		utils2.setRequestUrl(I.REQUEST_ADD_GROUP_MEMBERS)
+				.addParam(I.Member.GROUP_HX_ID,groupId)
+				.addParam(I.Member.USER_NAME,memberNames)
+				.targetClass(String.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+					@Override
+					public void onSuccess(String s) {
+						Log.e(TAG, "s=" + s);
+						Result result = Utils.getResultFromJson(s, GroupAvatar.class);
+						Log.e(TAG, "result=" + result);
+						if (result != null && result.isRetMsg()) {
 							runOnUiThread(new Runnable() {
 								public void run() {
 									progressDialog.dismiss();
@@ -190,11 +236,14 @@ public class NewGroupActivity extends BaseActivity {
 									finish();
 								}
 							});
+						} else {
+							progressDialog.dismiss();
 						}
 					}
 
 					@Override
 					public void onError(String error) {
+						progressDialog.dismiss();
 						Log.e(TAG, "error=" + error);
 					}
 				});
