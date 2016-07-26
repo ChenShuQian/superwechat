@@ -237,7 +237,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	/**
 	 * 更新数据库中的头像
 	 */
-	private void updateUserAvatar() {
+	private void updateUserAvatar(final Intent data) {
 		final File file = new File(OnSetAvatarListener.getAvatarPath(UserProfileActivity.this, I.AVATAR_TYPE_USER_PATH)
 				, avatarName + I.AVATAR_SUFFIX_JPG);
 		String userName = SuperWeChatApplication.getInstance().getUserName();
@@ -251,6 +251,8 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 					@Override
 					public void onSuccess(Result result) {
 						if (result.isRetMsg()) {
+							setPicToView(data);
+						} else {
 							Toast.makeText(UserProfileActivity.this, getString(R.string.toast_updatenick_success), Toast.LENGTH_SHORT)
 									.show();
 							dialog.dismiss();
@@ -323,7 +325,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 		if (requestCode == OnSetAvatarListener.REQUEST_CROP_PHOTO) {
 			dialog = ProgressDialog.show(this, getString(R.string.dl_update_photo), getString(R.string.dl_waiting));
 			dialog.show();
-			updateUserAvatar();
+			updateUserAvatar(data);
 		}
 	}
 
@@ -357,7 +359,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	}
 	
 	private void uploadUserAvatar(final byte[] data) {
-		dialog = ProgressDialog.show(this, getString(R.string.dl_update_photo), getString(R.string.dl_waiting));
+//		dialog = ProgressDialog.show(this, getString(R.string.dl_update_photo), getString(R.string.dl_waiting));
 		new Thread(new Runnable() {
 
 			@Override
