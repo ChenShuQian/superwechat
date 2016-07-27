@@ -280,6 +280,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		final OkHttpUtils2<String> utils2 = new OkHttpUtils2<>();
 		Log.e(TAG, "groupName=" + groupName );
 		Log.e(TAG, "groupId=" + groupId );
+		/**根据环信ID获取群组ID*/
 		int groupAvatarId = SuperWeChatApplication.getInstance().getGroupMap().get(groupId).getMGroupId();
 		Log.e(TAG, "groupAvatarId=" + groupAvatarId );
 		utils2.setRequestUrl(I.REQUEST_UPDATE_GROUP_NAME)
@@ -668,7 +669,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 //				avatar.setBounds(0, 0, referenceWidth, referenceHeight);
 //				button.setCompoundDrawables(null, avatar, null, null);
 				//显示群组成员昵称
-				UserUtils.setAppUserNick(username, holder.textView);
+//				UserUtils.setAppUserNick(username, holder.textView);
+				UserUtils.setAppMemberNick(groupId, username, holder.textView);
 //				holder.textView.setText(username);
 				Log.e(TAG, "username=" + username);
 
