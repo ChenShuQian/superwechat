@@ -50,7 +50,6 @@ import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.bean.GroupAvatar;
-import cn.ucai.superwechat.bean.MemberUserAvatar;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.utils.OkHttpUtils2;
 import cn.ucai.superwechat.utils.UserUtils;
@@ -221,8 +220,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			case REQUEST_CODE_EXIT: // 退出群
 				progressDialog.setMessage(st2);
 				progressDialog.show();
-				exitGropOwn();
-//				exitGrop();
+				exitGrop();
 				break;
 			case REQUEST_CODE_EXIT_DELETE: // 解散群
 				progressDialog.setMessage(st3);
@@ -406,31 +404,30 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				}
 			}
 		}).start();
+		deleteMemberToGroup(SuperWeChatApplication.getInstance().getUserName(), true);
 	}
 
-	private void exitGropOwn() {
+	private void deleteMemberToGroup(final String username, final boolean isExit) {
 		int mgroupId = SuperWeChatApplication.getInstance().getGroupMap().get(groupId).getMGroupId();
 		Log.e(TAG, "exitGropOwn().mgroupId=" + mgroupId);
 		final OkHttpUtils2<String> utils2 = new OkHttpUtils2<>();
 		utils2.setRequestUrl(I.REQUEST_DELETE_GROUP_MEMBER)
 				.addParam(I.Member.GROUP_ID, mgroupId+"")
-				.addParam(I.Member.USER_NAME, SuperWeChatApplication.getInstance().getUserName())
+				.addParam(I.Member.USER_NAME, username)
 				.targetClass(String.class)
 				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
 					@Override
 					public void onSuccess(String s) {
 						Result result = Utils.getResultFromJson(s, GroupAvatar.class);
-						GroupAvatar groupAvatar = (GroupAvatar) result.getRetData();
-						if (groupAvatar != null) {
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									exitGrop();
-									progressDialog.dismiss();
-									setResult(RESULT_OK);
-									finish();
-								}
-							});
+						if (result != null && result.isRetMsg()) {
+							if (isExit) {
+								GroupAvatar group = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+								SuperWeChatApplication.getInstance().getGroupList().remove(group);
+								SuperWeChatApplication.getInstance().getGroupMap().remove(groupId);
+							} else {
+								SuperWeChatApplication.getInstance().getMemberMap().get(groupId).remove(username);
+							}
+							Log.e(TAG, "delete_member_success");
 						} else {
 							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Exit_the_group_chat_failure), Toast.LENGTH_SHORT).show();
 						}
@@ -833,6 +830,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 							}
 						}).start();
+						deleteMemberToGroup(username, false);
 					}
 				});
 
