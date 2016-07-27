@@ -43,7 +43,6 @@ public class ExitGroupDialog extends BaseActivity{
     public void logout(View view){
     	setResult(RESULT_OK);
         finish();
-        
     }
     
     public void cancel(View view) {

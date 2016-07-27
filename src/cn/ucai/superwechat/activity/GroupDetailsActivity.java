@@ -221,7 +221,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			case REQUEST_CODE_EXIT: // 退出群
 				progressDialog.setMessage(st2);
 				progressDialog.show();
-				exitGrop();
+				exitGropOwn();
+//				exitGrop();
 				break;
 			case REQUEST_CODE_EXIT_DELETE: // 解散群
 				progressDialog.setMessage(st3);
@@ -349,8 +350,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	 * @param view
 	 */
 	public void exitGroup(View view) {
-		startActivityForResult(new Intent(this, ExitGroupDialog.class), REQUEST_CODE_EXIT);
 
+		startActivityForResult(new Intent(this, ExitGroupDialog.class), REQUEST_CODE_EXIT);
 	}
 
 	/**
@@ -405,6 +406,41 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				}
 			}
 		}).start();
+	}
+
+	private void exitGropOwn() {
+		int mgroupId = SuperWeChatApplication.getInstance().getGroupMap().get(groupId).getMGroupId();
+		Log.e(TAG, "exitGropOwn().mgroupId=" + mgroupId);
+		final OkHttpUtils2<String> utils2 = new OkHttpUtils2<>();
+		utils2.setRequestUrl(I.REQUEST_DELETE_GROUP_MEMBER)
+				.addParam(I.Member.GROUP_ID, mgroupId+"")
+				.addParam(I.Member.USER_NAME, SuperWeChatApplication.getInstance().getUserName())
+				.targetClass(String.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+					@Override
+					public void onSuccess(String s) {
+						Result result = Utils.getResultFromJson(s, GroupAvatar.class);
+						GroupAvatar groupAvatar = (GroupAvatar) result.getRetData();
+						if (groupAvatar != null) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									exitGrop();
+									progressDialog.dismiss();
+									setResult(RESULT_OK);
+									finish();
+								}
+							});
+						} else {
+							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Exit_the_group_chat_failure), Toast.LENGTH_SHORT).show();
+						}
+					}
+
+					@Override
+					public void onError(String error) {
+						Toast.makeText(getApplicationContext(), getResources().getString(R.string.Exit_the_group_chat_failure) + error, Toast.LENGTH_SHORT).show();
+					}
+				});
 	}
 
 	/**
@@ -475,6 +511,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				}
 			}
 		}).start();
+		/**数据库中添加群组成员*/
 		addGroupMembers(st6, groupId, newmembers);
 	}
 
@@ -495,7 +532,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					public void onSuccess(String s) {
 						Log.e(TAG, "s=" + s);
 						Result result = Utils.getResultFromJson(s, GroupAvatar.class);
-						GroupAvatar groupAvatar = (GroupAvatar) result.getRetData();
 						Log.e(TAG, "result=" + result);
 						if (result != null && result.isRetMsg()) {
 							runOnUiThread(new Runnable() {
@@ -503,8 +539,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 								public void run() {
 									progressDialog.dismiss();
 									setResult(RESULT_OK);
-									finish();
 									setUpdateMemberListener();
+									finish();
 								}
 							});
 						} else {
