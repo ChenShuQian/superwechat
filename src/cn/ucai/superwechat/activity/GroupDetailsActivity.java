@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -48,6 +50,7 @@ import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.bean.GroupAvatar;
+import cn.ucai.superwechat.bean.MemberUserAvatar;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.utils.OkHttpUtils2;
 import cn.ucai.superwechat.utils.UserUtils;
@@ -472,6 +475,52 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				}
 			}
 		}).start();
+		addGroupMembers(st6, groupId, newmembers);
+	}
+
+	private void addGroupMembers(final String st6, String groupId, String[] newmembers) {
+		String memberArr = "";
+		for (String m : newmembers) {
+			memberArr += m + ",";
+		}
+		memberArr = memberArr.substring(0, memberArr.length() - 1);
+		Log.e(TAG, "memberArr" + memberArr);
+		final OkHttpUtils2<String> utils2 = new OkHttpUtils2<>();
+		utils2.setRequestUrl(I.REQUEST_ADD_GROUP_MEMBERS)
+				.addParam(I.Member.GROUP_HX_ID,groupId)
+				.addParam(I.Member.USER_NAME,memberArr)
+				.targetClass(String.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+					@Override
+					public void onSuccess(String s) {
+						Log.e(TAG, "s=" + s);
+						Result result = Utils.getResultFromJson(s, GroupAvatar.class);
+						GroupAvatar groupAvatar = (GroupAvatar) result.getRetData();
+						Log.e(TAG, "result=" + result);
+						if (result != null && result.isRetMsg()) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									progressDialog.dismiss();
+									setResult(RESULT_OK);
+									finish();
+									setUpdateMemberListener();
+								}
+							});
+						} else {
+							progressDialog.dismiss();
+							Toast.makeText(getApplicationContext(), st6, Toast.LENGTH_LONG).show();
+						}
+					}
+
+					@Override
+					public void onError(String error) {
+						progressDialog.dismiss();
+						Log.e(TAG, "error=" + error);
+						Toast.makeText(getApplicationContext(), st6+",error="+error, Toast.LENGTH_LONG).show();
+					}
+				});
+
 	}
 
 	@Override
@@ -668,12 +717,10 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 //				Drawable avatar = getResources().getDrawable(R.drawable.default_avatar);
 //				avatar.setBounds(0, 0, referenceWidth, referenceHeight);
 //				button.setCompoundDrawables(null, avatar, null, null);
-				//显示群组成员昵称
 //				UserUtils.setAppUserNick(username, holder.textView);
-				UserUtils.setAppMemberNick(groupId, username, holder.textView);
 //				holder.textView.setText(username);
-				Log.e(TAG, "username=" + username);
-
+				//显示群组成员昵称
+				UserUtils.setAppMemberNick(groupId, username, holder.textView);
 				// demo群组成员的头像都用默认头像，需由开发者自己去设置头像
 				UserUtils.setAppUserAvatar(getContext(), username, holder.imageView);
 				if (isInDeleteMode) {
@@ -848,4 +895,19 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	    ImageView badgeDeleteView;
 	}
 
+	class UpdateMemberReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			refreshMembers();
+		}
+	}
+
+	UpdateMemberReceiver mReceiver;
+
+	private void setUpdateMemberListener() {
+		mReceiver = new UpdateMemberReceiver();
+		IntentFilter filter = new IntentFilter("update_member_list");
+		registerReceiver(mReceiver, filter);
+	}
 }
