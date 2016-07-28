@@ -17,12 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -293,7 +295,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					@Override
 					public void onSuccess(String s) {
 						Log.e(TAG, "s=" + s);
-						Result result = Utils.getResultFromJson(s, GroupAvatar.class);
+						final Result result = Utils.getResultFromJson(s, GroupAvatar.class);
 						if (result != null && result.isRetMsg()) {
 							new Thread(new Runnable() {
 								public void run() {
@@ -303,6 +305,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 											public void run() {
 												((TextView) findViewById(R.id.group_name)).setText(groupName + "(" + group.getAffiliationsCount() + st);
 												progressDialog.dismiss();
+												GroupAvatar groupAvatar = (GroupAvatar) result.getRetData();
+												SuperWeChatApplication.getInstance().getGroupList().add(groupAvatar);
+												SuperWeChatApplication.getInstance().getGroupMap().put(groupId, groupAvatar);
 												Toast.makeText(getApplicationContext(), st6, Toast.LENGTH_SHORT).show();
 											}
 										});
@@ -470,6 +475,26 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				}
 			}
 		}).start();
+		deleteGroupFromApp(st5);
+	}
+
+	private void deleteGroupFromApp(final String st5) {
+		GroupAvatar group = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+		OkHttpUtils2<String> utils2 = new OkHttpUtils2<>();
+		utils2.setRequestUrl(I.REQUEST_DELETE_GROUP)
+				.addParam(I.Group.GROUP_ID, String.valueOf(group.getMGroupId()))
+				.targetClass(String.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+					@Override
+					public void onSuccess(String string) {
+						Log.e(TAG, "deleteGroupFromApp().result=" + string);
+					}
+
+					@Override
+					public void onError(String error) {
+						Toast.makeText(getApplicationContext(), st5 + error, Toast.LENGTH_SHORT).show();
+					}
+				});
 	}
 
 	/**

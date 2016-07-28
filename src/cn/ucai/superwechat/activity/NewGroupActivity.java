@@ -44,6 +44,8 @@ import cn.ucai.superwechat.utils.Utils;
 import com.easemob.exceptions.EaseMobException;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NewGroupActivity extends BaseActivity {
 	private final static String TAG = NewGroupActivity.class.getSimpleName();
@@ -195,6 +197,9 @@ public class NewGroupActivity extends BaseActivity {
 									}
 								});
 							}
+							//添加群组信息到全局变量
+							SuperWeChatApplication.getInstance().getGroupMap().put(groupId, (GroupAvatar) result.getRetData());
+							SuperWeChatApplication.getInstance().getGroupList().add((GroupAvatar) result.getRetData());
 						} else {
 							progressDialog.dismiss();
 						}
