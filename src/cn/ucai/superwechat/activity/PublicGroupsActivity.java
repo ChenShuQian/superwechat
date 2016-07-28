@@ -40,6 +40,7 @@ import com.easemob.chat.EMCursorResult;
 import com.easemob.chat.EMGroupInfo;
 import com.easemob.chat.EMGroupManager;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.utils.UserUtils;
 
 import com.easemob.exceptions.EaseMobException;
@@ -133,7 +134,12 @@ public class PublicGroupsActivity extends BaseActivity {
 
                         public void run() {
                             searchBtn.setVisibility(View.VISIBLE);
-                            groupsList.addAll(returnGroups);
+                            /**过滤自己已在的群组*/
+                            for (EMGroupInfo g : returnGroups) {
+                                if (!SuperWeChatApplication.getInstance().getGroupMap().containsKey(g.getGroupId())) {
+                                    groupsList.add(g);
+                                }
+                            }
                             if(returnGroups.size() != 0){
                                 //获取cursor
                                 cursor = result.getCursor();
@@ -165,7 +171,7 @@ public class PublicGroupsActivity extends BaseActivity {
                             isLoading = false;
                             pb.setVisibility(View.INVISIBLE);
                             footLoadingLayout.setVisibility(View.GONE);
-                            Toast.makeText(PublicGroupsActivity.this, "加载数据失败，请检查网络或稍后重试", 0).show();
+                            Toast.makeText(PublicGroupsActivity.this, "加载数据失败，请检查网络或稍后重试", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
