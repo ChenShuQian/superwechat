@@ -36,11 +36,13 @@ import com.easemob.chat.EMGroupManager;
 
 import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.bean.GroupAvatar;
 import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.bean.UserAvatar;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.domain.InviteMessage;
 import cn.ucai.superwechat.domain.InviteMessage.InviteMesageStatus;
+import cn.ucai.superwechat.task.DownloadMemberMapTask;
 import cn.ucai.superwechat.utils.OkHttpUtils2;
 import cn.ucai.superwechat.utils.UserUtils;
 import cn.ucai.superwechat.utils.Utils;
@@ -183,10 +185,14 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			public void run() {
 				// 调用sdk的同意方法
 				try {
-					if(msg.getGroupId() == null) //同意好友请求
+					if (msg.getGroupId() == null){//同意好友请求
 						EMChatManager.getInstance().acceptInvitation(msg.getFrom());
-					else //同意加群申请
-					    EMGroupManager.getInstance().acceptApplication(msg.getFrom(), msg.getGroupId());
+					}
+					else { //同意加群申请
+						EMGroupManager.getInstance().acceptApplication(msg.getFrom(), msg.getGroupId());
+						addMemberToAppGroup(msg.getFrom(), msg.getGroupId());
+					}
+
 					((Activity) context).runOnUiThread(new Runnable() {
 
 						@Override
@@ -216,6 +222,28 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 				}
 			}
 		}).start();
+	}
+
+	private void addMemberToAppGroup(String username, final String hxid) {
+		final OkHttpUtils2<String> utils2 = new OkHttpUtils2<>();
+		utils2.setRequestUrl(I.REQUEST_ADD_GROUP_MEMBER)
+				.addParam(I.Member.USER_NAME,username)
+				.addParam(I.Member.GROUP_HX_ID,hxid)
+				.targetClass(String.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+					@Override
+					public void onSuccess(String s) {
+						Result result = Utils.getResultFromJson(s, GroupAvatar.class);
+						if (result != null && result.isRetMsg()) {
+							new DownloadMemberMapTask(hxid, context).execute();
+						}
+					}
+
+					@Override
+					public void onError(String error) {
+						Log.e(TAG, "error=" + error);
+					}
+				});
 	}
 
 	private static class ViewHolder {

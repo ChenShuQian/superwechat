@@ -27,7 +27,11 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupInfo;
 import com.easemob.chat.EMGroupManager;
+
+import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.SuperWeChatApplication;
+import cn.ucai.superwechat.utils.OkHttpUtils2;
 import cn.ucai.superwechat.utils.UserUtils;
 
 import com.easemob.exceptions.EaseMobException;
@@ -124,10 +128,14 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 					runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							if(group.isMembersOnly())
+							if(group.isMembersOnly()){
+								/**等待群主同意*/
 								Toast.makeText(GroupSimpleDetailActivity.this, st3, Toast.LENGTH_SHORT).show();
-							else
+							}
+							else{
+								/**加群成功*/
 								Toast.makeText(GroupSimpleDetailActivity.this, st4, Toast.LENGTH_SHORT).show();
+							}
 							btn_add_group.setEnabled(false);
 						}
 					});
@@ -143,8 +151,8 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 			}
 		}).start();
 	}
-	
-     private void showGroupDetail() {
+
+	private void showGroupDetail() {
          progressBar.setVisibility(View.INVISIBLE);
          //获取详情成功，并且自己不在群中，才让加入群聊按钮可点击
          if(!group.getMembers().contains(EMChatManager.getInstance().getCurrentUser()))
