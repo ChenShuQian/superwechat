@@ -57,7 +57,7 @@ public class AddContactActivity extends BaseActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_contact);
 		mTextView = (TextView) findViewById(R.id.add_list_friends);
-		mtvNothingText = (TextView) findViewById(R.id.tvNothingText);
+		mtvNothingText = (TextView) findViewById(R.id.tvNothing);
 
 		editText = (EditText) findViewById(R.id.edit_note);
 		String strAdd = getResources().getString(R.string.add_friend);

@@ -68,14 +68,14 @@ public class RegisterActivity extends BaseActivity {
 	}
 
 	private void setListener() {
-		findViewById(R.id.btLogin).setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				finish();
 			}
 		});
 
-		findViewById(R.id.btRegister).setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.btn_register).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				register();
@@ -106,11 +106,11 @@ public class RegisterActivity extends BaseActivity {
 
 	private void initView() {
 		userNameEditText = (EditText) findViewById(R.id.username);
-		userNickEditText = (EditText) findViewById(R.id.nick);
+		userNickEditText = (EditText) findViewById(R.id.nickname);
 		passwordEditText = (EditText) findViewById(R.id.password);
 		confirmPwdEditText = (EditText) findViewById(R.id.confirm_password);
 		mIvAvatar = (ImageView) findViewById(R.id.iv_avatar);
-		mrlAvatar = (RelativeLayout) findViewById(R.id.rlAvatar);
+		mrlAvatar = (RelativeLayout) findViewById(R.id.up_avatar);
 	}
 
 	/**

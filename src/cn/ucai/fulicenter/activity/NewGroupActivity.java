@@ -68,7 +68,7 @@ public class NewGroupActivity extends BaseActivity {
 		memberCheckbox = (CheckBox) findViewById(R.id.cb_member_inviter);
 		openInviteContainer = (LinearLayout) findViewById(R.id.ll_open_invite);
 		miv_avatar = (ImageView) findViewById(R.id.iv_avatar);
-		mrlLayoutAvatar = (RelativeLayout) findViewById(R.id.rl_layout_avatar);
+		mrlLayoutAvatar = (RelativeLayout) findViewById(R.id.group_avatar);
 		
 		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
@@ -85,7 +85,7 @@ public class NewGroupActivity extends BaseActivity {
 		mrlLayoutAvatar.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				mOnSetAvatarListener = new OnSetAvatarListener(NewGroupActivity.this, R.id.layout_avatar, getAvatarNAme(), I.AVATAR_TYPE_GROUP_PATH);			}
+				mOnSetAvatarListener = new OnSetAvatarListener(NewGroupActivity.this, R.id.group_layout, getAvatarNAme(), I.AVATAR_TYPE_GROUP_PATH);			}
 		});
 	}
 

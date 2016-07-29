@@ -75,7 +75,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 		tvNickName = (TextView) findViewById(R.id.user_nickname);
 		rlNickName = (RelativeLayout) findViewById(R.id.rl_nickname);
 		iconRightArrow = (ImageView) findViewById(R.id.ic_right_arrow);
-		mrlUserAvatar = (RelativeLayout) findViewById(R.id.rlUserAvatar);
+		mrlUserAvatar = (RelativeLayout) findViewById(R.id.rl_nickname);
 	}
 	
 	private void initListener() {
@@ -230,7 +230,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	}
 
 	private void uploadPhoto() {
-		mOnSetAvatarListener = new OnSetAvatarListener(UserProfileActivity.this, R.id.layoutAvatar, getAvatarName(), I.AVATAR_TYPE_USER_PATH);
+		mOnSetAvatarListener = new OnSetAvatarListener(UserProfileActivity.this, R.id.layout_parent, getAvatarName(), I.AVATAR_TYPE_USER_PATH);
 	}
 
 	private String getAvatarName() {
