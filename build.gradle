@@ -44,4 +44,9 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+    lintOptions{
+        disable "ResourceType"
+        checkReleaseBuilds false
+        abortOnError false
+    }
 }

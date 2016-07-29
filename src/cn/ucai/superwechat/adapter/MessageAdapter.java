@@ -632,7 +632,7 @@ public class MessageAdapter extends BaseAdapter{
 			}
 		}
 	}
-	
+
 	private void setRobotMenuMessageLayout(LinearLayout parentView,JSONArray jsonArr){
 		try {
 			parentView.removeAllViews();

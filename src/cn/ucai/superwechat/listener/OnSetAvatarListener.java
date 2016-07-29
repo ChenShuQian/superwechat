@@ -68,7 +68,7 @@ public class OnSetAvatarListener implements View.OnClickListener {
      * 构造器
      * @param mActivity：PopuWindow宿主Activity
      * @param parentId：宿主Activity的布局的id
-     * @param userName：个人账号和群号
+     * @param userName：个人账号和群号   ******保存图片的名称******
      * @param avatarType：头像类型：user_avatar或group_icon
      */
     public OnSetAvatarListener(Activity mActivity, int parentId, String userName, String avatarType) {
@@ -166,7 +166,7 @@ public class OnSetAvatarListener implements View.OnClickListener {
      * 设置拍照或从相册选择返回的结果，本方法在Activity.onActivityResult()调用
      * @param requestCode
      * @param data
-     * @param ivAvatar
+     * @param ivAvatar  ******调用该方法显示到ImageView******
      */
     public void setAvatar(int requestCode, Intent data, ImageView ivAvatar) {
         switch (requestCode) {
@@ -249,16 +249,16 @@ public class OnSetAvatarListener implements View.OnClickListener {
      */
     private void startCropPhotoActivity(Uri uri, int outputX, int outputY, int requestCode) {
         Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
+        intent.setDataAndType(uri, "image/*");                                /**设置Date和Type属性*/
         intent.putExtra("outputX", outputX);
         intent.putExtra("outputY", outputY);
         intent.putExtra("return-data", true);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);                        /**自定义剪裁的输出位置*/
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        mActivity.startActivityForResult(intent,requestCode);
+        mActivity.startActivityForResult(intent,requestCode);                 /**T1跳转到T2，当T2fnish后自动跳转到T1*/
     }
 
-    /**
+    /**i
      * 返回拍照文件保存的位置
      * @return
      */
