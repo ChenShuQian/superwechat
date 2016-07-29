@@ -1,0 +1,353 @@
+[33mcommit 8fb64f0fb0d039b4930a76a56ba7a5cd2a6358bb[m
+Author: csa <861842668@qq.com>
+Date:   Fri Jul 29 09:57:42 2016 +0800
+
+    生成签名APK
+
+[33mcommit bee88d2cf0ad498eacc3f9980ac203fabf10418a[m
+Author: csa <861842668@qq.com>
+Date:   Thu Jul 28 15:37:44 2016 +0800
+
+    同意群组申请
+
+[33mcommit f3660ec2cc6d4871c54ad90fe2a0a8ed51e1d3b2[m
+Author: csa <861842668@qq.com>
+Date:   Thu Jul 28 14:34:18 2016 +0800
+
+    公开群中过滤掉已加入的群
+
+[33mcommit dda3103813387248a08fe6c53a60ed2bb3305161[m
+Author: csa <861842668@qq.com>
+Date:   Thu Jul 28 12:30:32 2016 +0800
+
+    公开群的群图标显示
+
+[33mcommit 5fcd11ac06954d96e87c03e49bfac3a47390c70d[m
+Author: csa <861842668@qq.com>
+Date:   Thu Jul 28 11:42:16 2016 +0800
+
+    解散群组
+
+[33mcommit 13c4771c74c704e61f6e94c2380c4b55987e342e[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 27 17:21:40 2016 +0800
+
+    删除群组成员及退出群组
+
+[33mcommit b7d715e353278b644dfd7a61a66d2939597fa3ff[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 27 16:46:12 2016 +0800
+
+    退出群组
+
+[33mcommit 2a33afbf2ff4a0456c2a18d345dbf84a6feaa2a8[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 27 15:58:48 2016 +0800
+
+    添加群组成员
+
+[33mcommit 68bd62be4938290fd870438b55ebf9a500ff1685[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 27 15:32:02 2016 +0800
+
+    群组成员个人资料和群组详情显示头像昵称
+
+[33mcommit ec6611469ae4d77e05771734d934ea6a22b00e55[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 27 12:45:28 2016 +0800
+
+    显示群组成员昵称
+
+[33mcommit e6a4a4199acc006481f6c398123b34e107128e66[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 27 11:25:08 2016 +0800
+
+    进入群聊界面下载群组成员
+
+[33mcommit 4cd265a5c2d3195e1398748c526215f744995aef[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 27 10:46:59 2016 +0800
+
+    下载群组成员的任务类
+
+[33mcommit e43e1aa0190c4e3e1967ec5788290b3ade972aeb[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 26 19:53:49 2016 +0800
+
+    修改群组名称
+
+[33mcommit eef08f8ff4ffbb39f5619214deba4a19f6ea6be3[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 26 17:45:15 2016 +0800
+
+    设置会话界面群组头像和群组成员界面头像
+
+[33mcommit 9e3c8feca7f49809d37dc4c8a2fa9bce29317408[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 26 17:06:07 2016 +0800
+
+    群组列表显示群组头像
+
+[33mcommit 086481c9341145dd39ae692ecd9957aec7950d0f[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 26 16:28:53 2016 +0800
+
+    添加群组信息到全局变量并进行保存清空处理
+
+[33mcommit 87f408e08999ca38fcd242b199b2fb913b235ce9[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 26 15:39:38 2016 +0800
+
+    创建群组添加成员
+
+[33mcommit dccd5af96bfac8e1e5fb73a270d726d31ec1c24c[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 26 15:06:13 2016 +0800
+
+    创建群组到数据库
+
+[33mcommit 0b1f845330c6963432a2a68c8d926cc26ff6344c[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 26 14:32:09 2016 +0800
+
+    新建群组获取环信ID
+
+[33mcommit dd50770167eabb2f6e58f279ae02191abb414b6a[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 26 14:31:23 2016 +0800
+
+    新建群组的布局修改
+
+[33mcommit f6a3fa9800828829d57ba5184495a90298d7ceb1[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 26 10:45:29 2016 +0800
+
+    统一当前登录用户的头像显示
+
+[33mcommit 76f7f9a346f4f26dbb0fae608b0a6777704026a1[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 26 10:15:11 2016 +0800
+
+    登录成功时下载头像
+
+[33mcommit 9997a2b712472a920446bcacee6468fafb7b285a[m
+Author: csa <861842668@qq.com>
+Date:   Mon Jul 25 18:05:09 2016 +0800
+
+    更新用户头像
+
+[33mcommit f9d98e3955a643cc0cdbc3d8e2df9c7acdbd72ad[m
+Author: csa <861842668@qq.com>
+Date:   Mon Jul 25 16:07:29 2016 +0800
+
+    免登录时更新数据库中的昵称
+
+[33mcommit 92674fdcf9809e138bf6ac95b18cf28fa5bb8f46[m
+Author: csa <861842668@qq.com>
+Date:   Mon Jul 25 16:06:32 2016 +0800
+
+    更新内存中的昵称
+
+[33mcommit 40a44c62d030838335a41243f7ba537115e7e3a4[m
+Author: csa <861842668@qq.com>
+Date:   Mon Jul 25 15:33:05 2016 +0800
+
+    更新数据库中的昵称
+
+[33mcommit d6fd799c36b843079fa280860c2faf91050a13ef[m
+Author: csa <861842668@qq.com>
+Date:   Mon Jul 25 11:32:09 2016 +0800
+
+    优化删除好友
+
+[33mcommit 8af7948042b7c6215cf773d2f891dc64375b6afb[m
+Author: csa <861842668@qq.com>
+Date:   Mon Jul 25 11:00:54 2016 +0800
+
+    删除好友
+
+[33mcommit 0f033adde6cf564ee914236e78a5e000aea3abc6[m
+Author: csa <861842668@qq.com>
+Date:   Fri Jul 22 17:35:42 2016 +0800
+
+    联系人列表接受广播更新数据
+
+[33mcommit b759d3d8ad39211030e3c9a55f02ed0bd56676e6[m
+Author: csa <861842668@qq.com>
+Date:   Fri Jul 22 16:36:29 2016 +0800
+
+    添加好友关系到远程服务端
+
+[33mcommit a81da68f0414959c1f7148e81e59430a34399e0b[m
+Author: csa <861842668@qq.com>
+Date:   Fri Jul 22 15:02:19 2016 +0800
+
+    申请于通知页面头像与昵称的显示
+
+[33mcommit 0f902dc71f65cd98248b18c2127554e00e9e1e26[m
+Author: csa <861842668@qq.com>
+Date:   Fri Jul 22 11:44:31 2016 +0800
+
+    修改用户不能发送表情
+
+[33mcommit e16245ceb888981bab1a2a23535b98836db94764[m
+Author: csa <861842668@qq.com>
+Date:   Fri Jul 22 11:12:30 2016 +0800
+
+    修改会话界面的头像和昵称
+
+[33mcommit 94b1917263c75eaffd402a5732fe7cd52e043f9e[m
+Author: csa <861842668@qq.com>
+Date:   Fri Jul 22 10:58:24 2016 +0800
+
+    显示聊天昵称
+
+[33mcommit fa11fffaa40b6efb312f42d0adf06b14b6c0ade0[m
+Author: csa <861842668@qq.com>
+Date:   Fri Jul 22 10:47:16 2016 +0800
+
+    显示聊天界面头像
+
+[33mcommit ac7d3d5b3483b075827c460deeb2f106dadc5bca[m
+Author: csa <861842668@qq.com>
+Date:   Fri Jul 22 09:48:49 2016 +0800
+
+    查看个人资料
+
+[33mcommit ddcb02799da02d9f6dbd5e6b8355155f50888955[m
+Author: csa <861842668@qq.com>
+Date:   Fri Jul 22 09:06:23 2016 +0800
+
+    好友资料界面显示头像和昵称
+
+[33mcommit 7b975078e4ec87b3fc1cc803cb9f2cb840e97cde[m
+Author: csa <861842668@qq.com>
+Date:   Thu Jul 21 23:48:59 2016 +0800
+
+    好友资料界面显示头像和昵称
+
+[33mcommit fbf92fcc39dadad39e010dbdcb300a56aaed3381[m
+Author: csa <861842668@qq.com>
+Date:   Thu Jul 21 16:38:16 2016 +0800
+
+    修改查找用户信息
+
+[33mcommit 42ca9bb3bc694dd6e5b2734b2cb2b1bd1dfa220c[m
+Author: csa <861842668@qq.com>
+Date:   Thu Jul 21 16:01:33 2016 +0800
+
+    好友昵称查找
+
+[33mcommit 6bccf4e964d4c917d33cb90b8d3c79d36ec899ea[m
+Author: csa <861842668@qq.com>
+Date:   Thu Jul 21 14:54:56 2016 +0800
+
+    设置好友昵称
+
+[33mcommit f67ce1cf5d334094abbba7900d6c9b668dd53a11[m
+Author: csa <861842668@qq.com>
+Date:   Thu Jul 21 13:17:20 2016 +0800
+
+    添加好友头像
+
+[33mcommit 5a6d27270fdece406774ac4903cc9869ba4a35de[m
+Author: csa <861842668@qq.com>
+Date:   Thu Jul 21 10:54:31 2016 +0800
+
+    删除环信小助手和群聊
+
+[33mcommit 16d58c16a992f01938b302069341944ad6f5da59[m
+Author: csa <861842668@qq.com>
+Date:   Thu Jul 21 10:24:06 2016 +0800
+
+    保存免登陆联系人信息
+
+[33mcommit e273dd605958eace89008bf3c0921298db2a1401[m
+Author: csa <861842668@qq.com>
+Date:   Thu Jul 21 08:57:10 2016 +0800
+
+    加载用户好友
+
+[33mcommit 872672ee6512cc41879f7b8e5c290420fa48ca7d[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 23:38:49 2016 +0800
+
+    加载好友
+
+[33mcommit f519c8188f5d466adac016bb90407ebb40faa17b[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 15:53:29 2016 +0800
+
+    自动登录
+
+[33mcommit 504c6540033fd9f7f432b31dbf0f1c1cbb9b5d32[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 15:16:17 2016 +0800
+
+    添加Utils工具类，修改登录注册提示信息
+
+[33mcommit 0022116dec832f06a9a5e81274e54ea2fc81ca9f[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 14:56:27 2016 +0800
+
+    取消注册
+
+[33mcommit 5bc27b70ca785b8b0e7209ecdbf694b27e1493c5[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 14:28:24 2016 +0800
+
+    实现登录功能
+
+[33mcommit ebcecb4b1953592dbce5bdde045af1d83704f27a[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 13:26:46 2016 +0800
+
+    实现注册功能
+
+[33mcommit 5b83e32736326e1dd4b7f13c1b840f6200149d81[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 11:10:24 2016 +0800
+
+    添加创建用户表
+
+[33mcommit c97f6042758855907f1d0e832ad3b16f833f7252[m
+Author: csa <861842668@qq.com>
+Date:   Wed Jul 20 10:22:55 2016 +0800
+
+    注册界面相关点击事件
+
+[33mcommit 3cee1e881ae5dec22cbd469b1cbe8348ae8e9ec1[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 19 14:52:10 2016 +0800
+
+    使实体类实现可序列化接口
+
+[33mcommit 4fb35567069aaa190e6b242ec976053ed2502929[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 19 14:48:54 2016 +0800
+
+    从服务端添加实体类
+
+[33mcommit b36850273fc165ea9a379cd263e11393a5e66749[m
+Author: csa <861842668@qq.com>
+Date:   Tue Jul 19 14:47:56 2016 +0800
+
+    添加接口文件
+
+[33mcommit 45de39ef46da79bb743f18a150a9920905699895[m
+Author: csa <861842668@qq.com>
+Date:   Mon Jul 18 19:34:38 2016 +0800
+
+    修改闪屏、登录、注册界面
+
+[33mcommit c12c648b241cbed37d4f873130aca24c9b8876f0[m
+Author: csa <861842668@qq.com>
+Date:   Mon Jul 18 16:14:50 2016 +0800
+
+    添加(applicationId)
+
+[33mcommit e989c6d4c2fe4686e674f0f3a2dfef6c318762ff[m
+Author: csa <861842668@qq.com>
+Date:   Mon Jul 18 15:25:51 2016 +0800
+
+    init code
