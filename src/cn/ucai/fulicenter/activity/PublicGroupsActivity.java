@@ -40,7 +40,7 @@ import com.easemob.chat.EMCursorResult;
 import com.easemob.chat.EMGroupInfo;
 import com.easemob.chat.EMGroupManager;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuliCenterApplication;
 import cn.ucai.fulicenter.utils.UserUtils;
 
 import com.easemob.exceptions.EaseMobException;
@@ -136,7 +136,7 @@ public class PublicGroupsActivity extends BaseActivity {
                             searchBtn.setVisibility(View.VISIBLE);
                             /**过滤自己已在的群组*/
                             for (EMGroupInfo g : returnGroups) {
-                                if (!SuperWeChatApplication.getInstance().getGroupMap().containsKey(g.getGroupId())) {
+                                if (!FuliCenterApplication.getInstance().getGroupMap().containsKey(g.getGroupId())) {
                                     groupsList.add(g);
                                 }
                             }

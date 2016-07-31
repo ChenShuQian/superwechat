@@ -33,7 +33,7 @@ import com.easemob.chat.EMGroupManager;
 
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuliCenterApplication;
 import cn.ucai.fulicenter.bean.GroupAvatar;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.listener.OnSetAvatarListener;
@@ -162,7 +162,7 @@ public class NewGroupActivity extends BaseActivity {
 	private void createAppGroup(final String groupId, String groupName, String desc, final String[] members) {
 		boolean isPublic = checkBox.isChecked();
 		boolean invites = !isPublic;
-		String owner = SuperWeChatApplication.getInstance().getUserName();
+		String owner = FuliCenterApplication.getInstance().getUserName();
 		File file = new File(OnSetAvatarListener.getAvatarPath(NewGroupActivity.this, I.AVATAR_TYPE_GROUP_PATH)
 				, avatarName + I.AVATAR_SUFFIX_JPG);
 		final OkHttpUtils2<String> utils2 = new OkHttpUtils2<>();
@@ -195,8 +195,8 @@ public class NewGroupActivity extends BaseActivity {
 								});
 							}
 							//添加群组信息到全局变量
-							SuperWeChatApplication.getInstance().getGroupMap().put(groupId, (GroupAvatar) result.getRetData());
-							SuperWeChatApplication.getInstance().getGroupList().add((GroupAvatar) result.getRetData());
+							FuliCenterApplication.getInstance().getGroupMap().put(groupId, (GroupAvatar) result.getRetData());
+							FuliCenterApplication.getInstance().getGroupList().add((GroupAvatar) result.getRetData());
 						} else {
 							progressDialog.dismiss();
 						}

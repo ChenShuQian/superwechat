@@ -46,7 +46,7 @@ import com.easemob.EMNotifierEvent;
 import com.easemob.EMValueCallBack;
 
 import cn.ucai.fulicenter.I;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuliCenterApplication;
 import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactListener;
@@ -526,7 +526,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			// 保存增加的联系人
 			Map<String, User> localUsers = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList();
 			Map<String, User> toAddUsers = new HashMap<String, User>();
-			Map<String, UserAvatar> userMap = SuperWeChatApplication.getInstance().getUserMap();
+			Map<String, UserAvatar> userMap = FuliCenterApplication.getInstance().getUserMap();
 			List<String> toAddUserName = new ArrayList<>();
 			for (String username : usernameList) {
 				User user = setUserHead(username);
@@ -543,7 +543,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			for (String name : toAddUserName) {
 				final OkHttpUtils2<String> utils2 = new OkHttpUtils2<>();
 				utils2.setRequestUrl(I.REQUEST_ADD_CONTACT)
-						.addParam(I.Contact.USER_NAME,SuperWeChatApplication.getInstance().getUserName())
+						.addParam(I.Contact.USER_NAME, FuliCenterApplication.getInstance().getUserName())
 						.addParam(I.Contact.CU_NAME,name)
 						.targetClass(String.class)
 						.execute(new OkHttpUtils2.OnCompleteListener<String>() {
@@ -553,9 +553,9 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 								if (s != null && result.isRetMsg()) {
 									UserAvatar user = (UserAvatar) result.getRetData();
 									if (user != null) {
-										if (!SuperWeChatApplication.getInstance().getUserMap().containsKey(user.getMUserName())) {
-											SuperWeChatApplication.getInstance().getUserMap().put(user.getMUserName(), user);
-											SuperWeChatApplication.getInstance().getUserList().add(user);
+										if (!FuliCenterApplication.getInstance().getUserMap().containsKey(user.getMUserName())) {
+											FuliCenterApplication.getInstance().getUserMap().put(user.getMUserName(), user);
+											FuliCenterApplication.getInstance().getUserList().add(user);
 											sendStickyBroadcast(new Intent("update_contact_list"));
 										}
 									}

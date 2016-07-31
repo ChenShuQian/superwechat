@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.ucai.fulicenter.I;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuliCenterApplication;
 import cn.ucai.fulicenter.bean.GroupAvatar;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.utils.OkHttpUtils2;
@@ -42,14 +42,14 @@ public class DownloadGroupListTask {
                         List<GroupAvatar> list = (List<GroupAvatar>) result.getRetData();
                         if (list != null && list.size() > 0) {
                             //保存群组到全局变量
-                            SuperWeChatApplication.getInstance().setGroupList(list);
+                            FuliCenterApplication.getInstance().setGroupList(list);
                             Map<String, GroupAvatar> groupMap = new HashMap<String,GroupAvatar>();
                             for (GroupAvatar groupAvatar : list) {
                                 String groupAvatarUserName = groupAvatar.getMAvatarUserName();
                                 groupMap.put(groupAvatarUserName, groupAvatar);
                             }
-                            SuperWeChatApplication.getInstance().setGroupMap(groupMap);
-                            Map<String, GroupAvatar> groupMap1 = SuperWeChatApplication.getInstance().getGroupMap();
+                            FuliCenterApplication.getInstance().setGroupMap(groupMap);
+                            Map<String, GroupAvatar> groupMap1 = FuliCenterApplication.getInstance().getGroupMap();
                             mContext.sendStickyBroadcast(new Intent("update_group_list"));
                         }
                     }

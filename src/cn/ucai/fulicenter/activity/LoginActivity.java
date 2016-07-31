@@ -36,7 +36,7 @@ import android.widget.Toast;
 import com.easemob.EMCallBack;
 
 import cn.ucai.fulicenter.I;
-import cn.ucai.fulicenter.SuperWeChatApplication;
+import cn.ucai.fulicenter.FuliCenterApplication;
 import cn.ucai.fulicenter.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
@@ -94,8 +94,8 @@ public class LoginActivity extends BaseActivity {
 
 		setListener();
 
-		if (SuperWeChatApplication.getInstance().getUserName() != null) {
-			usernameEditText.setText(SuperWeChatApplication.getInstance().getUserName());
+		if (FuliCenterApplication.getInstance().getUserName() != null) {
+			usernameEditText.setText(FuliCenterApplication.getInstance().getUserName());
 		}
 	}
 
@@ -256,10 +256,10 @@ public class LoginActivity extends BaseActivity {
 
 	private void loginSuccess(UserAvatar user) {
 		// 登陆成功，保存用户名密码
-		SuperWeChatApplication.getInstance().setUser(user);
-		SuperWeChatApplication.getInstance().setUserName(currentUsername);
-		SuperWeChatApplication.getInstance().setPassword(currentPassword);
-		SuperWeChatApplication.currentUserNick = user.getMUserNick();
+		FuliCenterApplication.getInstance().setUser(user);
+		FuliCenterApplication.getInstance().setUserName(currentUsername);
+		FuliCenterApplication.getInstance().setPassword(currentPassword);
+		FuliCenterApplication.currentUserNick = user.getMUserNick();
 
 		new DownloadContactListTask(currentUsername,LoginActivity.this).execute();
 		new DownloadGroupListTask(currentUsername, LoginActivity.this).execute();
@@ -284,7 +284,7 @@ public class LoginActivity extends BaseActivity {
 		}
 		// 更新当前用户的nickname 此方法的作用是在ios离线推送时能够显示用户nick
 		boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(
-				SuperWeChatApplication.currentUserNick.trim());
+				FuliCenterApplication.currentUserNick.trim());
 		if (!updatenick) {
 			Log.e("LoginActivity", "update current user nick fail");
 		}
