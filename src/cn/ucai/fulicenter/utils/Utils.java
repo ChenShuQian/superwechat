@@ -79,6 +79,9 @@ public class Utils {
     public static <T> Result getResultFromJson(String jsonStr,Class<T> clazz){
         Result result = new Result();
         try {
+            if (jsonStr == null || jsonStr.isEmpty() || jsonStr.length() < 3) {
+                return null;
+            }
             JSONObject jsonObject = new JSONObject(jsonStr);
             if (!jsonObject.isNull("retCode")) {
                 result.setRetCode(jsonObject.getInt("retCode"));
@@ -139,9 +142,20 @@ public class Utils {
         Result result = new Result();
         Log.e("Utils","jsonStr="+jsonStr);
         try {
+            if (jsonStr == null || jsonStr.isEmpty() || jsonStr.length() < 3) {
+                return null;
+            }
             JSONObject jsonObject = new JSONObject(jsonStr);
-            result.setRetCode(jsonObject.getInt("retCode"));
-            result.setRetMsg(jsonObject.getBoolean("retMsg"));
+            if (!jsonObject.isNull("retCode")) {
+                result.setRetCode(jsonObject.getInt("retCode"));
+            } else if (!jsonObject.isNull("msg")) {
+                result.setRetCode(jsonObject.getInt("msg"));
+            }
+            if (!jsonObject.isNull("retMsg")) {
+                result.setRetMsg(jsonObject.getBoolean("retMsg"));
+            } else if (!jsonObject.isNull("result")) {
+                result.setRetCode(jsonObject.getInt("result"));
+            }
             if(!jsonObject.isNull("retData")) {
                 JSONArray array = jsonObject.getJSONArray("retData");
                 if (array != null) {
@@ -165,9 +179,20 @@ public class Utils {
     public static <T> Result getPageResultFromJson(String jsonStr,Class<T> clazz){
         Result result = new Result();
         try {
+            if (jsonStr == null || jsonStr.isEmpty() || jsonStr.length() < 3) {
+                return null;
+            }
             JSONObject jsonObject = new JSONObject(jsonStr);
-            result.setRetCode(jsonObject.getInt("retCode"));
-            result.setRetMsg(jsonObject.getBoolean("retMsg"));
+            if (!jsonObject.isNull("retCode")) {
+                result.setRetCode(jsonObject.getInt("retCode"));
+            } else if (!jsonObject.isNull("msg")) {
+                result.setRetCode(jsonObject.getInt("msg"));
+            }
+            if (!jsonObject.isNull("retMsg")) {
+                result.setRetMsg(jsonObject.getBoolean("retMsg"));
+            } else if (!jsonObject.isNull("result")) {
+                result.setRetCode(jsonObject.getInt("result"));
+            }
             if(!jsonObject.isNull("retData")) {
                 JSONObject jsonPager = jsonObject.getJSONObject("retData");
                 if (jsonPager != null) {
