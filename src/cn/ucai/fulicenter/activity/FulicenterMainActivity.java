@@ -1,10 +1,6 @@
 package cn.ucai.fulicenter.activity;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
@@ -12,7 +8,7 @@ import android.widget.TextView;
 
 import cn.ucai.fulicenter.R;
 
-public class FulicenterMainActivity extends Activity {
+public class FulicenterMainActivity extends BaseActivity{
     private static final String TAG = FulicenterMainActivity.class.getSimpleName();
     RadioButton rbNewGoods;
     RadioButton rbBoutique;

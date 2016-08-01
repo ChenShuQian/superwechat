@@ -371,4 +371,7 @@
     <string name="msg_501">MSG_LOCATION_GET_FAIL</string>
     <string name="msg_999">MSG_UNKNOW</string>
     <string name="msg_1">MSG_ILLEGAL_REQUEST</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
