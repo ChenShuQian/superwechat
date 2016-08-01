@@ -52,17 +52,6 @@ public class UserUtils {
 		return user;
 	}
 
-	public static MemberUserAvatar getAppMemberInfo(String hxid, String username) {
-		MemberUserAvatar member = null;
-		HashMap<String, MemberUserAvatar> members = FuliCenterApplication.getInstance().getMemberMap().get(hxid);
-		if (members == null || members.size() < 0) {
-			return null;
-		} else {
-			member = members.get(username);
-		}
-		return member;
-	}
-
 	/**
      * 设置用户头像
      * @param username
@@ -88,30 +77,6 @@ public class UserUtils {
             Picasso.with(context).load(R.drawable.default_avatar).into(imageView);
         }
     }
-
-	/**
-	 * 设置用户群组头像
-	 * @param hxid
-	 */
-	public static void setAppGroupAvatar(Context context, String hxid, ImageView imageView){
-		String path = "";
-		if(path != null && hxid != null){
-			path = getGroupAvatarPath(hxid);
-			Picasso.with(context).load(path).placeholder(R.drawable.group_icon).into(imageView);
-		}else{
-			Picasso.with(context).load(R.drawable.group_icon).into(imageView);
-		}
-	}
-
-	//获取群组头像地址
-	public static String getGroupAvatarPath(String hxid) {
-		StringBuilder path = new StringBuilder(I.SERVER_ROOT);
-		path.append(I.QUESTION).append(I.KEY_REQUEST)
-				.append(I.EQL).append(I.REQUEST_DOWNLOAD_AVATAR).append(I.AND)
-				.append(I.NAME_OR_HXID).append(I.EQL).append(hxid).append(I.AND)
-				.append(I.AVATAR_TYPE).append(I.EQL).append(I.AVATAR_TYPE_GROUP_PATH);
-		return path.toString();
-	}
 
 	//获取好友头像地址
 	public static String getUserAvatarPath(String username) {
@@ -223,11 +188,11 @@ public class UserUtils {
 	}
 
 	public static void setAppMemberNick(String hxid, String username, TextView textView) {
-		MemberUserAvatar member = getAppMemberInfo(hxid, username);
-		if (member != null && member.getMUserNick() != null) {
-			textView.setText(member.getMUserNick());
-		} else {
-			textView.setText(username);
-		}
+//		MemberUserAvatar member = getAppMemberInfo(hxid, username);
+//		if (member != null && member.getMUserNick() != null) {
+//			textView.setText(member.getMUserNick());
+//		} else {
+//			textView.setText(username);
+//		}
 	}
 }

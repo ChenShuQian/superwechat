@@ -99,7 +99,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 		String username = conversation.getUserName();
 		if (conversation.getType() == EMConversationType.GroupChat) {
 			// 群聊消息，显示群聊头像
-			UserUtils.setAppGroupAvatar(getContext(), username, holder.avatar);
+//			UserUtils.setAppGroupAvatar(getContext(), username, holder.avatar);
 //			holder.avatar.setImageResource(R.drawable.group_icon);
 			EMGroup group = EMGroupManager.getInstance().getGroup(username);
 			holder.name.setText(group != null ? group.getGroupName() : username);
