@@ -37,7 +37,7 @@ public class NewGoodsFragment extends Fragment {
     Context mContext;
 
     TextView mtvFreshHint;
-    int pageId = 1;
+    int pageId = 0;
     int pageSize = 10;
     GridLayoutManager mGridLayoutManager;
     GoodAdapter mAdapter;
@@ -57,18 +57,47 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void initData() {
+        /**下载首页数据*/
         downLoadGoodsList();
     }
 
     private void setListener() {
+        /**下拉刷新*/
         setDownRefreshListener();
+        /**上拉加载*/
+        setPullAddListener();
+    }
+
+    private void setPullAddListener() {
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            int lastPosition;
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == recyclerView.SCROLL_STATE_IDLE && lastPosition == mAdapter.getItemCount() - 1) {
+                    if (lastPosition == mAdapter.getItemCount() - 1) {
+                        pageId += pageSize;
+                        downLoadGoodsList();
+                    }
+                    return;
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int firstPosition = mGridLayoutManager.findFirstVisibleItemPosition();
+                lastPosition = mGridLayoutManager.findLastVisibleItemPosition();
+                Log.e(TAG, "first=" + firstPosition + ",last=" + lastPosition);
+            }
+        });
     }
 
     private void setDownRefreshListener() {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                pageId = 1;
+                pageId = 0;
                 mtvFreshHint.setVisibility(View.VISIBLE);
                 downLoadGoodsList();
             }
@@ -83,10 +112,14 @@ public class NewGoodsFragment extends Fragment {
                 Log.e(TAG, "result=" + result);
                 mtvFreshHint.setVisibility(View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
+                mAdapter.setMore(true);
                 if (result != null) {
                     Log.e(TAG, "result=" + result.length);
                     List<NewGoodBean> newGoodList = Arrays.asList(result);
                     mAdapter.initData(newGoodList);
+                    if (newGoodList.size() < pageSize) {
+                        mAdapter.setMore(false);
+                    }
                 }
             }
 

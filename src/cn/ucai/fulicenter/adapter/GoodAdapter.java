@@ -22,7 +22,15 @@ import cn.ucai.fulicenter.utils.ImageUtils;
 public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context mContext;
     List<NewGoodBean> mNewGoodsList;
-    GoodViewHolder mGoodViewHolder;
+    boolean isMore;
+
+    public boolean isMore() {
+        return isMore;
+    }
+
+    public void setMore(boolean more) {
+        isMore = more;
+    }
 
     public GoodAdapter(Context context, List<NewGoodBean> list) {
         mContext = context;
