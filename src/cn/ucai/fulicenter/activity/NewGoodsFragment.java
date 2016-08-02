@@ -39,6 +39,7 @@ public class NewGoodsFragment extends Fragment {
     TextView mtvFreshHint;
     int pageId = 0;
     int pageSize = 10;
+    int action = I.ACTION_DOWNLOAD;
     GridLayoutManager mGridLayoutManager;
     GoodAdapter mAdapter;
     public NewGoodsFragment() {
@@ -75,11 +76,11 @@ public class NewGoodsFragment extends Fragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == recyclerView.SCROLL_STATE_IDLE && lastPosition == mAdapter.getItemCount() - 1) {
-                    if (lastPosition == mAdapter.getItemCount() - 1) {
+                    if (mAdapter.isMore()) {
+                        action = I.ACTION_PULL_UP;
                         pageId += pageSize;
                         downLoadGoodsList();
                     }
-                    return;
                 }
             }
 
@@ -89,6 +90,7 @@ public class NewGoodsFragment extends Fragment {
                 int firstPosition = mGridLayoutManager.findFirstVisibleItemPosition();
                 lastPosition = mGridLayoutManager.findLastVisibleItemPosition();
                 Log.e(TAG, "first=" + firstPosition + ",last=" + lastPosition);
+                mSwipeRefreshLayout.setEnabled(mGridLayoutManager.findFirstVisibleItemPosition() == 0);
             }
         });
     }
@@ -99,6 +101,7 @@ public class NewGoodsFragment extends Fragment {
             public void onRefresh() {
                 pageId = 0;
                 mtvFreshHint.setVisibility(View.VISIBLE);
+                action = I.ACTION_PULL_DOWN;
                 downLoadGoodsList();
             }
         });
@@ -112,14 +115,23 @@ public class NewGoodsFragment extends Fragment {
                 Log.e(TAG, "result=" + result);
                 mtvFreshHint.setVisibility(View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
+                mAdapter.setFooterText("加载更多...");
                 mAdapter.setMore(true);
                 if (result != null) {
                     Log.e(TAG, "result=" + result.length);
                     List<NewGoodBean> newGoodList = Arrays.asList(result);
-                    mAdapter.initData(newGoodList);
+                    if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
+                        mAdapter.initData(newGoodList);
+                    } else {
+                        mAdapter.addAllList(newGoodList);
+                    }
                     if (newGoodList.size() < pageSize) {
+                        mAdapter.setFooterText("没有更多数据...");
                         mAdapter.setMore(false);
                     }
+                } else {
+                    mAdapter.setFooterText("没有更多数据...");
+                    mAdapter.setMore(false);
                 }
             }
 
