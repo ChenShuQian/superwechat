@@ -7,12 +7,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.ucai.fulicenter.I;
@@ -27,11 +30,15 @@ import cn.ucai.fulicenter.utils.Utils;
  * A simple {@link Fragment} subclass.
  */
 public class NewGoodsFragment extends Fragment {
+    private final static String TAG = NewGoodsFragment.class.getSimpleName();
     SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
     List<NewGoodBean> mNewGoodList;
     Context mContext;
 
+    TextView mtvFreshHint;
+    int pageId = 1;
+    int pageSize = 10;
     GridLayoutManager mGridLayoutManager;
     GoodAdapter mAdapter;
     public NewGoodsFragment() {
@@ -43,8 +50,63 @@ public class NewGoodsFragment extends Fragment {
         mContext = getContext();
         View view = inflater.inflate(R.layout.fragment_new_goods, container, false);
         mNewGoodList = new ArrayList<>();
+        initData();
         initView(view);
+        setListener();
         return view;
+    }
+
+    private void initData() {
+        downLoadGoodsList();
+    }
+
+    private void setListener() {
+        setDownRefreshListener();
+    }
+
+    private void setDownRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pageId = 1;
+                mtvFreshHint.setVisibility(View.VISIBLE);
+                downLoadGoodsList();
+            }
+        });
+    }
+
+
+    private void downLoadGoodsList() {
+        findNewFoodsList(new OkHttpUtils2.OnCompleteListener<NewGoodBean[]>() {
+            @Override
+            public void onSuccess(NewGoodBean[] result) {
+                Log.e(TAG, "result=" + result);
+                mtvFreshHint.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (result != null) {
+                    Log.e(TAG, "result=" + result.length);
+                    List<NewGoodBean> newGoodList = Arrays.asList(result);
+                    mAdapter.initData(newGoodList);
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "error=" + error);
+                mtvFreshHint.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    private void findNewFoodsList(OkHttpUtils2.OnCompleteListener<NewGoodBean[]> listener) {
+        final OkHttpUtils2<NewGoodBean[]> utils2 = new OkHttpUtils2<>();
+        utils2.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
+                .addParam(I.NewAndBoutiqueGood.CAT_ID, String.valueOf(I.CAT_ID))
+                .addParam(I.PAGE_ID, String.valueOf(pageId))
+                .addParam(I.PAGE_SIZE, String.valueOf(pageSize))
+                .targetClass(NewGoodBean[].class)
+                .execute(listener);
     }
 
     private void initView(View view) {
@@ -61,6 +123,8 @@ public class NewGoodsFragment extends Fragment {
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mAdapter = new GoodAdapter(mContext, mNewGoodList);
         mRecyclerView.setAdapter(mAdapter);
+
+        mtvFreshHint = (TextView) view.findViewById(R.id.tvFreshHint);
     }
 
 }

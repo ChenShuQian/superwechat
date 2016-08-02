@@ -249,6 +249,7 @@ public class OkHttpUtils2<T> {
         }catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        Log.e("okhttp","1 murl="+ mUrl.toString());
         return this;
     }
 
