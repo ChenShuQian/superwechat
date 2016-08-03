@@ -13,6 +13,8 @@ import com.google.gson.Gson;
 import cn.ucai.fulicenter.D;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.bean.AlbumsBean;
+import cn.ucai.fulicenter.bean.GoodDetailsBean;
 import cn.ucai.fulicenter.bean.NewGoodBean;
 import cn.ucai.fulicenter.utils.OkHttpUtils2;
 import cn.ucai.fulicenter.view.FlowIndicator;
@@ -31,6 +33,7 @@ public class GoodDetailsActivity extends BaseActivity {
     SlideAutoLoopView mSlideAutoLoopView;
     FlowIndicator mFlowIndicator;
     WebView mGoodBrief;
+    GoodDetailsBean mGoodDetail;
     int mGoodId;
 
     @Override
@@ -62,8 +65,8 @@ public class GoodDetailsActivity extends BaseActivity {
                         Log.e(TAG, "result=" + s);
                         if (s != null) {
                             Gson gson = new Gson();
-                            NewGoodBean newGoodBean = gson.fromJson(s, NewGoodBean.class);
-                            showGoodDetail(newGoodBean);
+                            mGoodDetail = gson.fromJson(s, GoodDetailsBean.class);
+                            showGoodDetail();
                         } else {
                             Toast.makeText(GoodDetailsActivity.this, "加载商品详情失败", Toast.LENGTH_SHORT);
                             finish();
@@ -79,11 +82,31 @@ public class GoodDetailsActivity extends BaseActivity {
                 });
     }
 
-    private void showGoodDetail(NewGoodBean newGoodBean) {
-        tvNameEnglish.setText(newGoodBean.getGoodsEnglishName());
-        tvGoodName.setText(newGoodBean.getGoodsName());
-        tvPriceShop.setText(newGoodBean.getShopPrice());
-        tvPriceCurrent.setText(newGoodBean.getCurrencyPrice());
+    private void showGoodDetail() {
+        tvNameEnglish.setText(mGoodDetail.getGoodsEnglishName());
+        tvGoodName.setText(mGoodDetail.getGoodsName());
+        tvPriceShop.setText(mGoodDetail.getShopPrice());
+        tvPriceCurrent.setText(mGoodDetail.getCurrencyPrice());
+        mSlideAutoLoopView.startPlayLoop(mFlowIndicator, getAlbumImageUrl(), getAlbumImageSize());
+    }
+
+    private String[] getAlbumImageUrl() {
+        String[] albumImageUrl = new String[]{};
+        if (mGoodDetail.getPromotePrice() != null && mGoodDetail.getPromotePrice().length() > 0) {
+            AlbumsBean[] albums = mGoodDetail.getProperties()[0].getAlbums();
+            albumImageUrl = new String[albums.length];
+            for (int i=0;i<albumImageUrl.length;i++) {
+                albumImageUrl[i] = albums[i].getImgUrl();
+            }
+        }
+        return albumImageUrl;
+    }
+
+    private int getAlbumImageSize() {
+        if (mGoodDetail.getPromotePrice() != null && mGoodDetail.getPromotePrice().length() > 0) {
+            return mGoodDetail.getProperties()[0].getAlbums().length;
+        }
+        return 0;
     }
 
     private void initView() {
