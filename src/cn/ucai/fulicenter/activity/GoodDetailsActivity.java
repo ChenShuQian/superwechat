@@ -6,9 +6,14 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import cn.ucai.fulicenter.D;
+import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.bean.NewGoodBean;
 import cn.ucai.fulicenter.utils.OkHttpUtils2;
 import cn.ucai.fulicenter.view.FlowIndicator;
 import cn.ucai.fulicenter.view.SlideAutoLoopView;
@@ -38,7 +43,47 @@ public class GoodDetailsActivity extends BaseActivity {
 
     private void initData() {
         mGoodId = getIntent().getIntExtra(D.GoodDetails.KEY_GOODS_ID, 0);
+        if (mGoodId > 0) {
+            downLoadGoodDetail();
+        } else {
+            finish();
+        }
         Log.e(TAG, "mGoodId=" + mGoodId);
+    }
+
+    private void downLoadGoodDetail() {
+        final OkHttpUtils2<String> utils2 = new OkHttpUtils2<>();
+        utils2.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
+                .addParam(D.GoodDetails.KEY_GOODS_ID,String.valueOf(mGoodId))
+                .targetClass(String.class)
+                .execute(new OkHttpUtils2.OnCompleteListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        Log.e(TAG, "result=" + s);
+                        if (s != null) {
+                            Gson gson = new Gson();
+                            NewGoodBean newGoodBean = gson.fromJson(s, NewGoodBean.class);
+                            showGoodDetail(newGoodBean);
+                        } else {
+                            Toast.makeText(GoodDetailsActivity.this, "加载商品详情失败", Toast.LENGTH_SHORT);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG, "error=" + error);
+                        Toast.makeText(GoodDetailsActivity.this, "加载商品详情失败", Toast.LENGTH_SHORT);
+                        finish();
+                    }
+                });
+    }
+
+    private void showGoodDetail(NewGoodBean newGoodBean) {
+        tvNameEnglish.setText(newGoodBean.getGoodsEnglishName());
+        tvGoodName.setText(newGoodBean.getGoodsName());
+        tvPriceShop.setText(newGoodBean.getShopPrice());
+        tvPriceCurrent.setText(newGoodBean.getCurrencyPrice());
     }
 
     private void initView() {
