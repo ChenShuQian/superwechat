@@ -2,6 +2,7 @@ package cn.ucai.fulicenter.view;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.TextView;
 
 import cn.ucai.fulicenter.R;
 
@@ -16,5 +17,10 @@ public class DisPlayUtils {
                 activity.finish();
             }
         });
+    }
+
+    public static void initBoutique(final Activity activity,String name) {
+        TextView textView = (TextView) activity.findViewById(R.id.tv_goods_name);
+        textView.setText(name);
     }
 }

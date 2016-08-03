@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,7 +19,9 @@ import java.util.List;
 
 import cn.ucai.fulicenter.D;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.activity.BoutiqueSortActivity;
 import cn.ucai.fulicenter.activity.GoodDetailsActivity;
+import cn.ucai.fulicenter.activity.NewGoodsFragment;
 import cn.ucai.fulicenter.bean.BoutiqueBean;
 import cn.ucai.fulicenter.footer.FooterHolder;
 import cn.ucai.fulicenter.utils.ImageUtils;
@@ -66,7 +69,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
             case ItemType:
                 view = LayoutInflater.from(mContext).inflate(R.layout.item_boutique, parent, false);
-                holder = new GoodViewHolder(view);
+                holder = new BoutiqueViewHolder(view);
                 break;
         }
         return holder;
@@ -79,20 +82,20 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return;
         }
         BoutiqueBean BoutiqueBean = mNewGoodsList.get(position);
-        GoodViewHolder viewHolder = (GoodViewHolder) holder;
+        BoutiqueViewHolder viewHolder = (BoutiqueViewHolder) holder;
         final BoutiqueBean good = mNewGoodsList.get(position);
         Log.e(TAG, "good="+good.toString());
         ImageUtils.setGoodThumb(mContext,viewHolder.ivBoutiqueImg,good.getImageurl());
         viewHolder.tvBoutiqueTitle.setText(BoutiqueBean.getTitle());
         viewHolder.tv_boutique_name.setText(BoutiqueBean.getName());
         viewHolder.tv_boutique_description.setText(BoutiqueBean.getDescription());
-//        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mContext.startActivity(new Intent(mContext, GoodDetailsActivity.class)
-//                .putExtra(D.GoodDetails.KEY_GOODS_ID,good.getGoodsId()));
-//            }
-//        });
+        viewHolder.layout_boutique_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContext.startActivity(new Intent(mContext, BoutiqueSortActivity.class)
+                .putExtra(D.Boutique.KEY_ID,good.getId()));
+            }
+        });
     }
 
     @Override
@@ -119,16 +122,16 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mNewGoodsList.addAll(newGoodList);
     }
 
-    class GoodViewHolder extends RecyclerView.ViewHolder {
-//        LinearLayout layout;
+    class BoutiqueViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout layout_boutique_item;
         ImageView ivBoutiqueImg;
         TextView tvBoutiqueTitle;
         TextView tv_boutique_name;
         TextView tv_boutique_description;
 
-        public GoodViewHolder(View itemView) {
+        public BoutiqueViewHolder(View itemView) {
             super(itemView);
-//            layout = (LinearLayout) itemView.findViewById(R.id.layout_good);
+            layout_boutique_item = (RelativeLayout) itemView.findViewById(R.id.layout_boutique_item);
             ivBoutiqueImg = (ImageView) itemView.findViewById(R.id.ivBoutiqueImg);
             tvBoutiqueTitle = (TextView) itemView.findViewById(R.id.tvBoutiqueTitle);
             tv_boutique_name = (TextView) itemView.findViewById(R.id.tv_boutique_name);
