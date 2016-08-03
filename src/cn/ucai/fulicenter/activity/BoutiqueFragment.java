@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,37 +21,37 @@ import java.util.List;
 
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.adapter.BoutiqueAdapter;
 import cn.ucai.fulicenter.adapter.GoodAdapter;
+import cn.ucai.fulicenter.bean.BoutiqueBean;
 import cn.ucai.fulicenter.bean.NewGoodBean;
-import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.utils.OkHttpUtils2;
-import cn.ucai.fulicenter.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewGoodsFragment extends Fragment {
-    private final static String TAG = NewGoodsFragment.class.getSimpleName();
+public class BoutiqueFragment extends Fragment {
+    private final static String TAG = BoutiqueFragment.class.getSimpleName();
     SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView mRecyclerView;
-    List<NewGoodBean> mNewGoodList;
+    List<BoutiqueBean> mBoutiqueList;
     Context mContext;
 
     TextView mtvFreshHint;
     int pageId = 0;
     int pageSize = 10;
     int action = I.ACTION_DOWNLOAD;
-    GridLayoutManager mGridLayoutManager;
-    GoodAdapter mAdapter;
-    public NewGoodsFragment() {
+    LinearLayoutManager mLinearLayoutManager;
+    BoutiqueAdapter mAdapter;
+    public BoutiqueFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContext = getContext();
-        View view = inflater.inflate(R.layout.fragment_new_goods, container, false);
-        mNewGoodList = new ArrayList<>();
+        View view = inflater.inflate(R.layout.fragment_boutique, container, false);
+        mBoutiqueList = new ArrayList<>();
         initData();
         initView(view);
         setListener();
@@ -87,10 +88,10 @@ public class NewGoodsFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int firstPosition = mGridLayoutManager.findFirstVisibleItemPosition();
-                lastPosition = mGridLayoutManager.findLastVisibleItemPosition();
+                int firstPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+                lastPosition = mLinearLayoutManager.findLastVisibleItemPosition();
                 Log.e(TAG, "first=" + firstPosition + ",last=" + lastPosition);
-                mSwipeRefreshLayout.setEnabled(mGridLayoutManager.findFirstVisibleItemPosition() == 0);
+                mSwipeRefreshLayout.setEnabled(mLinearLayoutManager.findFirstVisibleItemPosition() == 0);
             }
         });
     }
@@ -109,9 +110,9 @@ public class NewGoodsFragment extends Fragment {
 
 
     private void downLoadGoodsList() {
-        findNewFoodsList(new OkHttpUtils2.OnCompleteListener<NewGoodBean[]>() {
+        findNewFoodsList(new OkHttpUtils2.OnCompleteListener<BoutiqueBean[]>() {
             @Override
-            public void onSuccess(NewGoodBean[] result) {
+            public void onSuccess(BoutiqueBean[] result) {
                 Log.e(TAG, "result=" + result);
                 mtvFreshHint.setVisibility(View.GONE);
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -119,13 +120,13 @@ public class NewGoodsFragment extends Fragment {
                 mAdapter.setMore(true);
                 if (result != null) {
                     Log.e(TAG, "result=" + result.length);
-                    List<NewGoodBean> newGoodList = Arrays.asList(result);
+                    List<BoutiqueBean> boutiqueList = Arrays.asList(result);
                     if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
-                        mAdapter.initData(newGoodList);
+                        mAdapter.initData(boutiqueList);
                     } else {
-                        mAdapter.addAllList(newGoodList);
+                        mAdapter.addAllList(boutiqueList);
                     }
-                    if (newGoodList.size() < pageSize) {
+                    if (boutiqueList.size() < pageSize) {
                         mAdapter.setFooterText("没有更多数据...");
                         mAdapter.setMore(false);
                     }
@@ -144,13 +145,10 @@ public class NewGoodsFragment extends Fragment {
         });
     }
 
-    private void findNewFoodsList(OkHttpUtils2.OnCompleteListener<NewGoodBean[]> listener) {
-        final OkHttpUtils2<NewGoodBean[]> utils2 = new OkHttpUtils2<>();
-        utils2.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
-                .addParam(I.NewAndBoutiqueGood.CAT_ID, String.valueOf(I.CAT_ID))
-                .addParam(I.PAGE_ID, String.valueOf(pageId))
-                .addParam(I.PAGE_SIZE, String.valueOf(pageSize))
-                .targetClass(NewGoodBean[].class)
+    private void findNewFoodsList(OkHttpUtils2.OnCompleteListener<BoutiqueBean[]> listener) {
+        final OkHttpUtils2<BoutiqueBean[]> utils2 = new OkHttpUtils2<>();
+        utils2.setRequestUrl(I.REQUEST_FIND_BOUTIQUES)
+                .targetClass(BoutiqueBean[].class)
                 .execute(listener);
     }
 
@@ -163,10 +161,10 @@ public class NewGoodsFragment extends Fragment {
                 R.color.google_green
         );
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rvNewGood);
-        mGridLayoutManager = new GridLayoutManager(mContext, I.COLUM_NUM);
-        mGridLayoutManager.setOrientation(LinearLayout.VERTICAL);
-        mRecyclerView.setLayoutManager(mGridLayoutManager);
-        mAdapter = new GoodAdapter(mContext, mNewGoodList);
+        mLinearLayoutManager = new LinearLayoutManager(mContext);
+        mLinearLayoutManager.setOrientation(LinearLayout.VERTICAL);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mAdapter = new BoutiqueAdapter(mContext, mBoutiqueList);
         mRecyclerView.setAdapter(mAdapter);
 
         mtvFreshHint = (TextView) view.findViewById(R.id.tvFreshHint);
