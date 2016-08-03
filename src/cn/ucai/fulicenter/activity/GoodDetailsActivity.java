@@ -15,8 +15,8 @@ import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.AlbumsBean;
 import cn.ucai.fulicenter.bean.GoodDetailsBean;
-import cn.ucai.fulicenter.bean.NewGoodBean;
 import cn.ucai.fulicenter.utils.OkHttpUtils2;
+import cn.ucai.fulicenter.view.DisPlayUtils;
 import cn.ucai.fulicenter.view.FlowIndicator;
 import cn.ucai.fulicenter.view.SlideAutoLoopView;
 
@@ -88,6 +88,7 @@ public class GoodDetailsActivity extends BaseActivity {
         tvPriceShop.setText(mGoodDetail.getShopPrice());
         tvPriceCurrent.setText(mGoodDetail.getCurrencyPrice());
         mSlideAutoLoopView.startPlayLoop(mFlowIndicator, getAlbumImageUrl(), getAlbumImageSize());
+        mGoodBrief.loadDataWithBaseURL(null, mGoodDetail.getGoodsBrief(), D.TEXT_HTML, D.UTF_8, null);
     }
 
     private String[] getAlbumImageUrl() {
@@ -110,6 +111,7 @@ public class GoodDetailsActivity extends BaseActivity {
     }
 
     private void initView() {
+        DisPlayUtils.initBack(this);
         ivShare = (ImageView) findViewById(R.id.iv_good_share);
         ivCollect = (ImageView) findViewById(R.id.iv_good_collect);
         ivCart = (ImageView) findViewById(R.id.iv_good_cart);
