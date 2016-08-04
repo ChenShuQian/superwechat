@@ -82,17 +82,17 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
             holder.iv_category_pic = (ImageView) view.findViewById(R.id.iv_category_pic);
             holder.tv_category_text = (TextView) view.findViewById(R.id.tv_category_text);
             holder.iv_category_img = (ImageView) view.findViewById(R.id.iv_category_img);
+            view.setTag(holder);
         } else {
             holder = (GroupViewHolder) view.getTag();
         }
         CategoryGroupBean group = getGroup(groupPosition);
         ImageUtils.setGroupCategoryImage(mContext, holder.iv_category_img, group.getImageUrl());
         if (isExpanded) {
-            holder.iv_category_pic.setImageResource(R.drawable.expand_on);
-        } else {
             holder.iv_category_pic.setImageResource(R.drawable.expand_off);
+        } else {
+            holder.iv_category_pic.setImageResource(R.drawable.expand_on);
         }
-        view.setTag(holder);
         return view;
     }
 
@@ -105,22 +105,21 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
             holder.layout_category_child = (RelativeLayout) view.findViewById(R.id.layout_category_child);
             holder.iv_category_child_thumb = (ImageView) view.findViewById(R.id.iv_category_child_thumb);
             holder.tv_category_child_name = (TextView) view.findViewById(R.id.tv_category_child_name);
+            view.setTag(holder);
         } else {
             holder = (ChildViewHolder) view.getTag();
         }
 
-        if (isExpanded) {
+//        if (isExpanded) {
             CategoryChildBean child = getChild(groupPosition, childPosition);
             if (child != null) {
                 ImageUtils.setChildCategoryImage(mContext, holder.iv_category_child_thumb, child.getImageUrl());
                 holder.tv_category_child_name.setText(child.getName());
             }
-            holder.layout_category_child.setVisibility(View.GONE);
-        } else {
-            holder.layout_category_child.setVisibility(View.VISIBLE);
-        }
-
-        view.setTag(holder);
+//            holder.layout_category_child.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.layout_category_child.setVisibility(View.GONE);
+//        }
         return view;
     }
 
