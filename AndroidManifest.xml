@@ -333,8 +333,10 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="3ecea51f560650b1ed8a4b99808f52e8" />
 
-        <activity android:name=".activity.FulicenterMainActivity" />
-        <activity android:name=".activity.BoutiqueSortActivity"></activity>
+        <activity android:name=".activity.FulicenterMainActivity"
+            android:theme="@style/horizontal_slide"/>
+        <activity android:name=".activity.BoutiqueSortActivity"
+            android:theme="@style/horizontal_slide"></activity>
     </application>
 
 </manifest>
