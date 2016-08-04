@@ -54,6 +54,10 @@ public class BoutiqueSortActivity extends Activity {
     private void initData() {
         mBoutiqueId = getIntent().getIntExtra(D.Boutique.KEY_ID, 0);
         mTatle = getIntent().getStringExtra(D.Boutique.KEY_TITLE);
+        if (mBoutiqueId < 0) {
+            finish();
+        }
+        /**修改精选二级分类title*/
         DisPlayUtils.initBoutique(this,mTatle);
         Log.e(TAG, "mBoutiqueId=" + mBoutiqueId);
         Log.e(TAG, "mTatle=" + mTatle);

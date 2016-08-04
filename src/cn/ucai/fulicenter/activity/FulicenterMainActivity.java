@@ -23,6 +23,7 @@ public class FulicenterMainActivity extends BaseActivity{
     int currentIndex;
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
+    CategoryFragment mCategoryFragment;
     Fragment[] fragments;
 
     @Override
@@ -43,7 +44,8 @@ public class FulicenterMainActivity extends BaseActivity{
     private void initFragment() {
         mNewGoodsFragment = new NewGoodsFragment();
         mBoutiqueFragment = new BoutiqueFragment();
-        fragments = new Fragment[]{mNewGoodsFragment,mBoutiqueFragment};
+        mCategoryFragment = new CategoryFragment();
+        fragments = new Fragment[]{mNewGoodsFragment,mBoutiqueFragment,mCategoryFragment};
     }
 
     private void initView() {
@@ -92,7 +94,6 @@ public class FulicenterMainActivity extends BaseActivity{
                 trx.add(R.id.fragment_container, fragments[index]);
             }
             trx.show(fragments[index]).commit();
-
             currentIndex = index;
         }
     }
