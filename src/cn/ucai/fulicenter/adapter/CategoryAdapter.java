@@ -1,6 +1,8 @@
 package cn.ucai.fulicenter.adapter;
 
 import android.content.Context;
+import android.nfc.Tag;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -87,6 +89,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
             holder = (GroupViewHolder) view.getTag();
         }
         CategoryGroupBean group = getGroup(groupPosition);
+        holder.tv_category_text.setText(group.getName());
         ImageUtils.setGroupCategoryImage(mContext, holder.iv_category_img, group.getImageUrl());
         if (isExpanded) {
             holder.iv_category_pic.setImageResource(R.drawable.expand_off);
@@ -126,6 +129,14 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
     @Override
     public boolean isChildSelectable(int i, int i1) {
         return false;
+    }
+
+    public void addAll(List<CategoryGroupBean> mGroupList, List<ArrayList<CategoryChildBean>> mChildList) {
+        this.mGroupList.clear();
+        this.mGroupList.addAll(mGroupList);
+        this.mChildList.clear();
+        this.mChildList.addAll(mChildList);
+        notifyDataSetChanged();
     }
 
     class GroupViewHolder {
