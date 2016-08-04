@@ -36,6 +36,7 @@ public class BoutiqueSortActivity extends Activity {
     int pageId = 0;
     int pageSize = 10;
     int mBoutiqueId;
+    String mTatle;
     int action = I.ACTION_DOWNLOAD;
     GridLayoutManager mGridLayoutManager;
     GoodAdapter mAdapter;
@@ -52,13 +53,16 @@ public class BoutiqueSortActivity extends Activity {
 
     private void initData() {
         mBoutiqueId = getIntent().getIntExtra(D.Boutique.KEY_ID, 0);
+        mTatle = getIntent().getStringExtra(D.Boutique.KEY_TITLE);
+        DisPlayUtils.initBoutique(this,mTatle);
         Log.e(TAG, "mBoutiqueId=" + mBoutiqueId);
+        Log.e(TAG, "mTatle=" + mTatle);
         downLoadGoodsList();
     }
 
     private void setListener() {
         /**下拉刷新*/
-        setDownRefreshListener();/**/
+        setDownRefreshListener();
         /**上拉加载*/
         setPullAddListener();
     }

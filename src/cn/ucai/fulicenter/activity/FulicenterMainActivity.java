@@ -30,6 +30,20 @@ public class FulicenterMainActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fulicenter_main);
         initView();
+        initFragment();
+        // 添加显示第一个fragment
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, mNewGoodsFragment)
+                .add(R.id.fragment_container, mBoutiqueFragment)
+                .hide(mBoutiqueFragment)
+                .show(mNewGoodsFragment)
+                .commit();
+    }
+
+    private void initFragment() {
+        mNewGoodsFragment = new NewGoodsFragment();
+        mBoutiqueFragment = new BoutiqueFragment();
+        fragments = new Fragment[]{mNewGoodsFragment,mBoutiqueFragment};
     }
 
     private void initView() {
@@ -45,16 +59,6 @@ public class FulicenterMainActivity extends BaseActivity{
         mrbTabs[2] = rbCategory;
         mrbTabs[3] = rbCart;
         mrbTabs[4] = rbPerson;
-        mNewGoodsFragment = new NewGoodsFragment();
-        mBoutiqueFragment = new BoutiqueFragment();
-        fragments = new Fragment[]{mNewGoodsFragment,mBoutiqueFragment};
-        // 添加显示第一个fragment
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, mNewGoodsFragment)
-//                .add(R.id.fragment_container, mBoutiqueFragment)
-//                .hide(contactListFragment)
-                .show(mNewGoodsFragment)
-                .commit();
     }
 
     public void onCheckedChange(View view) {
@@ -75,22 +79,20 @@ public class FulicenterMainActivity extends BaseActivity{
                 index = 4;
                 break;
         }
-        if (currentIndex != index) {
+        mrbTabs[currentIndex].setSelected(false);
+        // 把当前tab设为选中状态
+        mrbTabs[index].setSelected(true);
+
+        Log.e(TAG, "index=" + index + ",currentIndex=" + currentIndex);
+        if (index != currentIndex) {
+            setRadioButtonStatus(index);
             FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
             trx.hide(fragments[currentIndex]);
             if (!fragments[index].isAdded()) {
                 trx.add(R.id.fragment_container, fragments[index]);
             }
             trx.show(fragments[index]).commit();
-        }
-        mrbTabs[currentIndex].setSelected(false);
-        // 把当前tab设为选中状态
-        mrbTabs[index].setSelected(true);
-        currentIndex = index;
 
-        Log.e(TAG, "index=" + index + ",currentIndex=" + currentIndex);
-        if (index != currentIndex) {
-            setRadioButtonStatus(index);
             currentIndex = index;
         }
     }
