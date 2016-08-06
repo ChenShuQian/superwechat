@@ -68,12 +68,12 @@ public class RegisterActivity extends BaseActivity {
 	}
 
 	private void setListener() {
-		findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				finish();
-			}
-		});
+//		findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View view) {
+//				finish();
+//			}
+//		});
 
 		findViewById(R.id.btn_register).setOnClickListener(new View.OnClickListener() {
 			@Override
