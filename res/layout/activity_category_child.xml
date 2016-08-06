@@ -33,7 +33,7 @@
             android:background="@null"
             android:text="价格"
             android:drawableRight="@drawable/arrow_order_down"
-            android:paddingRight="5dp"/>
+            android:paddingRight="2dp"/>
         <Button
             android:id="@+id/btn_sort_addtime"
             android:layout_width="0dp"
