@@ -1,7 +1,7 @@
 package cn.ucai.fulicenter.adapter;
 
 import android.content.Context;
-import android.nfc.Tag;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +13,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.activity.CategoryChildActivity;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.utils.ImageUtils;
@@ -100,7 +102,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isExpanded, View view, ViewGroup viewGroup) {
+    public View getChildView(final int groupPosition, int childPosition, boolean isExpanded, View view, ViewGroup viewGroup) {
         ChildViewHolder holder;
         if (view == null) {
             view = View.inflate(mContext, R.layout.item_category_child, null);
@@ -112,17 +114,22 @@ public class CategoryAdapter extends BaseExpandableListAdapter{
         } else {
             holder = (ChildViewHolder) view.getTag();
         }
-
-//        if (isExpanded) {
-            CategoryChildBean child = getChild(groupPosition, childPosition);
-            if (child != null) {
-                ImageUtils.setChildCategoryImage(mContext, holder.iv_category_child_thumb, child.getImageUrl());
-                holder.tv_category_child_name.setText(child.getName());
-            }
-//            holder.layout_category_child.setVisibility(View.VISIBLE);
-//        } else {
-//            holder.layout_category_child.setVisibility(View.GONE);
-//        }
+        final CategoryChildBean child = getChild(groupPosition, childPosition);
+        if (child != null) {
+            ImageUtils.setChildCategoryImage(mContext, holder.iv_category_child_thumb, child.getImageUrl());
+            holder.tv_category_child_name.setText(child.getName());
+            holder.layout_category_child.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mContext.startActivity(new Intent(mContext, CategoryChildActivity.class)
+                            .putExtra(I.CategoryChild.CAT_ID, child.getId())
+                            .putExtra(I.CategoryGroup.NAME,mGroupList.get(groupPosition).getName())
+                            .putExtra("childList",mChildList.get(groupPosition)));
+                    Log.e("main", "child.getId()=" + child.getId());
+                    Log.e("main", "mGroupList.get(groupPosition).getName()=" + mGroupList.get(groupPosition).getName());
+                }
+            });
+        }
         return view;
     }
 

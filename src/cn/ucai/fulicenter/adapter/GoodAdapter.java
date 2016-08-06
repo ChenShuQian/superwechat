@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import cn.ucai.fulicenter.D;
+import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.activity.GoodDetailsActivity;
 import cn.ucai.fulicenter.bean.NewGoodBean;
@@ -34,9 +35,16 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     final static int FooterType = 0;
     final static int ItemType = 1;
     String FooterText;
+    int sortBy;
 
     public void setFooterText(String footerText) {
         FooterText = footerText;
+        notifyDataSetChanged();
+    }
+
+    public void setSortBy(int sortBy) {
+        this.sortBy = sortBy;
+        soryByAddTime();
         notifyDataSetChanged();
     }
 
@@ -52,6 +60,7 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mContext = context;
         mNewGoodsList = new ArrayList<>();
         mNewGoodsList.addAll(list);
+        sortBy = I.SORT_BY_ADDTIME_DESC;
         soryByAddTime();
     }
 
@@ -112,6 +121,7 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void initData(List<NewGoodBean> list) {
+        Log.e(TAG, "list=" + list.toString());
         mNewGoodsList.clear();
         mNewGoodsList.addAll(list);
         soryByAddTime();
@@ -139,10 +149,35 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void soryByAddTime() {
+        for (NewGoodBean n : mNewGoodsList) {
+            if (n.getAddTime() == null) {
+                return;
+            }
+        }
         Collections.sort(mNewGoodsList, new Comparator<NewGoodBean>() {
             @Override
             public int compare(NewGoodBean good1, NewGoodBean good2) {
-                return (int) (Long.valueOf(good2.getAddTime()) - Long.valueOf(good1.getAddTime()));
+                int result = 0;
+                switch (sortBy) {
+                    case I.SORT_BY_ADDTIME_DESC:
+                        result = (int) (Long.valueOf(good2.getAddTime()) - Long.valueOf(good1.getAddTime()));
+                        break;
+                    case I.SORT_BY_ADDTIME_ASC:
+                        result = (int) (Long.valueOf(good1.getAddTime()) - Long.valueOf(good2.getAddTime()));
+                        break;
+                    case I.SORT_BY_PRICE_DESC:
+                        result = converPrice(good1.getCurrencyPrice()) - converPrice(good2.getCurrencyPrice());
+                        break;
+                    case I.SORT_BY_PRICE_ASC:
+                        result = converPrice(good2.getCurrencyPrice()) - converPrice(good1.getCurrencyPrice());
+                        break;
+                }
+                return result;
+            }
+
+            private int converPrice(String price) {
+                price = price.substring(1,price.length());
+                return Integer.parseInt(price);
             }
         });
     }

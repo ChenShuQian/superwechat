@@ -24,6 +24,8 @@ public class FulicenterMainActivity extends BaseActivity{
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mCategoryFragment;
+    PersonFragment mPersonFragment;
+    CartFragment mCartFragment;
     Fragment[] fragments;
 
     @Override
@@ -37,7 +39,10 @@ public class FulicenterMainActivity extends BaseActivity{
                 .add(R.id.fragment_container, mNewGoodsFragment)
                 .add(R.id.fragment_container, mBoutiqueFragment)
                 .add(R.id.fragment_container, mCategoryFragment)
+                .add(R.id.fragment_container, mPersonFragment)
+                .add(R.id.fragment_container, mCartFragment)
                 .hide(mBoutiqueFragment).hide(mCategoryFragment)
+                .hide(mPersonFragment).hide(mCartFragment)
                 .show(mNewGoodsFragment)
                 .commit();
     }
@@ -46,7 +51,9 @@ public class FulicenterMainActivity extends BaseActivity{
         mNewGoodsFragment = new NewGoodsFragment();
         mBoutiqueFragment = new BoutiqueFragment();
         mCategoryFragment = new CategoryFragment();
-        fragments = new Fragment[]{mNewGoodsFragment,mBoutiqueFragment,mCategoryFragment};
+        mPersonFragment = new PersonFragment();
+        mCartFragment = new CartFragment();
+        fragments = new Fragment[]{mNewGoodsFragment, mBoutiqueFragment, mCategoryFragment, mCartFragment, mPersonFragment};
     }
 
     private void initView() {
