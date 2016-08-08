@@ -66,6 +66,17 @@
 
         <!-- 登陆 -->
         <activity
+            android:name=".activity.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" />
+
+        <activity
+            android:name=".activity.CollectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" />
+
+        <!-- 登陆 -->
+        <activity
             android:name=".activity.GoodDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />

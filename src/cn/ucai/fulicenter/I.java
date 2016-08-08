@@ -1,11 +1,12 @@
 package cn.ucai.fulicenter;
 
 public interface I {
-    String SERVER_URL = "http://10.0.2.2:8080/FuLiCenterServer/Server";
+    String SERVER_URL = "http://localhost:8080/FuLiCenterServer/Server";
     String SERVER_ROOT = "http://10.0.2.2:8080/FuLiCenterServer/Server";
     String QUESTION = "?";
     String EQL = "=";
     String AND = "&";
+    String OK = "ok";
     public static final String FILE_NAME="file_name";
 
     public static final int REQUEST_CODE_LOGIN = 1;

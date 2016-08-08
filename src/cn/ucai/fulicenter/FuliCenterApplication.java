@@ -120,6 +120,8 @@ public class FuliCenterApplication extends Application {
 	private List<UserAvatar> userList = new ArrayList<>();
 	/**全局的当前登录用户的好友MAP集合*/
 	private Map<String, UserAvatar> userMap = new HashMap<String,UserAvatar>();
+	/**全局的当前登录用户的收藏商品的数量*/
+	private int collectCount;
 
 	public Map<String, UserAvatar> getUserMap() {
 		return userMap;
@@ -143,5 +145,13 @@ public class FuliCenterApplication extends Application {
 
 	public void setUserList(List<UserAvatar> userList) {
 		this.userList = userList;
+	}
+
+	public int getCollectCount() {
+		return collectCount;
+	}
+
+	public void setCollectCount(int collectCount) {
+		this.collectCount = collectCount;
 	}
 }
