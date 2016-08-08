@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.R;
 
 public class FulicenterMainActivity extends BaseActivity{
@@ -19,6 +21,7 @@ public class FulicenterMainActivity extends BaseActivity{
     RadioButton rbPerson;
     TextView tvCartHint;
     RadioButton[] mrbTabs;
+    int ACTION_LOGIN = 100;
     int index;
     int currentIndex;
     NewGoodsFragment mNewGoodsFragment;
@@ -39,10 +42,7 @@ public class FulicenterMainActivity extends BaseActivity{
                 .add(R.id.fragment_container, mNewGoodsFragment)
                 .add(R.id.fragment_container, mBoutiqueFragment)
                 .add(R.id.fragment_container, mCategoryFragment)
-                .add(R.id.fragment_container, mPersonFragment)
-                .add(R.id.fragment_container, mCartFragment)
                 .hide(mBoutiqueFragment).hide(mCategoryFragment)
-                .hide(mPersonFragment).hide(mCartFragment)
                 .show(mNewGoodsFragment)
                 .commit();
     }
@@ -86,22 +86,26 @@ public class FulicenterMainActivity extends BaseActivity{
                 index = 3;
                 break;
             case R.id.rbPerson:
-                index = 4;
+                if (DemoHXSDKHelper.getInstance().isLogined()) {
+                    index = 4;
+                } else {
+                    startActivityForResult(new Intent(this, LoginActivity.class),ACTION_LOGIN);
+                }
                 break;
         }
-        mrbTabs[currentIndex].setSelected(false);
-        // 把当前tab设为选中状态
-        mrbTabs[index].setSelected(true);
-
         Log.e(TAG, "index=" + index + ",currentIndex=" + currentIndex);
+        setFragment();
+    }
+
+    private void setFragment() {
         if (index != currentIndex) {
-            setRadioButtonStatus(index);
             FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
             trx.hide(fragments[currentIndex]);
             if (!fragments[index].isAdded()) {
                 trx.add(R.id.fragment_container, fragments[index]);
             }
             trx.show(fragments[index]).commit();
+            setRadioButtonStatus(index);
             currentIndex = index;
         }
     }
@@ -114,5 +118,26 @@ public class FulicenterMainActivity extends BaseActivity{
                 mrbTabs[i].setChecked(false);
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ACTION_LOGIN) {
+            if (DemoHXSDKHelper.getInstance().isLogined()) {
+                index = 4;
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!DemoHXSDKHelper.getInstance().isLogined() && index == 4) {
+            index = 0;
+        }
+        setFragment();
+        setRadioButtonStatus(currentIndex);
+        Log.e(TAG, "index=" + index + ",currentIndex=" + currentIndex);
     }
 }
