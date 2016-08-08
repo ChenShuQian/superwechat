@@ -12,7 +12,7 @@ public class UserAvatar implements Serializable{
 	private String mavatarPath;
 	private Integer mavatarType;
 	private String mavatarLastUpdateTime;
-	
+
 	public UserAvatar() {
 		super();
 	}
