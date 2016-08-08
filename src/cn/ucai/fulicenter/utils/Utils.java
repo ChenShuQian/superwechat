@@ -91,7 +91,7 @@ public class Utils {
             if (!jsonObject.isNull("retMsg")) {
                 result.setRetMsg(jsonObject.getBoolean("retMsg"));
             } else if (!jsonObject.isNull("result")) {
-                result.setRetCode(jsonObject.getInt("result"));
+                result.setRetMsg(jsonObject.getBoolean("result"));
             }
             if (!jsonObject.isNull("retData")) {
                 JSONObject jsonRetData = jsonObject.getJSONObject("retData");
