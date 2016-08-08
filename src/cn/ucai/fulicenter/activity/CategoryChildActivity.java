@@ -191,6 +191,8 @@ public class CategoryChildActivity extends Activity {
         mCatChildFilterButton = (CatChildFilterButton) findViewById(R.id.btnCatChildFilter);
         mtvFreshHint = (TextView) findViewById(R.id.tvFreshHint);
         DisPlayUtils.initBack(this);
+
+
     }
 
     class SortStatusChangedListener implements View.OnClickListener {

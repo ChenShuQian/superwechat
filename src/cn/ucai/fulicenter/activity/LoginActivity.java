@@ -51,11 +51,13 @@ import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.UserAvatar;
 import cn.ucai.fulicenter.db.UserDao;
 import cn.ucai.fulicenter.domain.User;
+import cn.ucai.fulicenter.task.DownloadCollectCountTask;
 import cn.ucai.fulicenter.task.DownloadContactListTask;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.OkHttpUtils2;
 import cn.ucai.fulicenter.utils.UserUtils;
 import cn.ucai.fulicenter.utils.Utils;
+import cn.ucai.fulicenter.view.DisPlayUtils;
 
 /**
  * 登陆页面
@@ -82,12 +84,11 @@ public class LoginActivity extends BaseActivity {
 		// 如果用户名密码都有，直接进入主页面
 		if (DemoHXSDKHelper.getInstance().isLogined()) {
 			autoLogin = true;
-			startActivity(new Intent(LoginActivity.this, MainActivity.class));
-
+			startActivity(new Intent(LoginActivity.this, FulicenterMainActivity.class));
 			return;
 		}
 		setContentView(R.layout.activity_login);
-
+		DisPlayUtils.initBoutique(this,"登录");
 		usernameEditText = (EditText) findViewById(R.id.username);
 		passwordEditText = (EditText) findViewById(R.id.password);
 
@@ -194,13 +195,14 @@ public class LoginActivity extends BaseActivity {
 				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
 					@Override
 					public void onSuccess(String s) {
+						Log.e(TAG,"s"+s);
 						Result result = Utils.getResultFromJson(s, UserAvatar.class);
-						if (s != null && result.isRetMsg()) {
+						if (s != null) {
 							UserAvatar user = (UserAvatar) result.getRetData();
 							if (user != null) {
-								downloadUserAvatar();
 								saveUserToDB(user);
 								loginSuccess(user);
+								downloadUserAvatar();
 							}
 						} else {
 							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed) +
@@ -211,7 +213,7 @@ public class LoginActivity extends BaseActivity {
 					@Override
 					public void onError(String error) {
 						pd.dismiss();
-						DemoHXSDKHelper.getInstance().logout(true,null);
+						DemoHXSDKHelper.getInstance().logout(false,null);
 						Toast.makeText(getApplicationContext(), R.string.Login_failed, Toast.LENGTH_LONG).show();
 					}
 				});
@@ -219,7 +221,7 @@ public class LoginActivity extends BaseActivity {
 
 	private void downloadUserAvatar() {
 		OkHttpUtils2<Message> utils2 = new OkHttpUtils2<>();
-		utils2.url(UserUtils.getUserAvatarPath(currentUsername))
+		utils2.url(UserUtils.getUserAvatarPath(FuliCenterApplication.getInstance().getUserName()))
 				.targetClass(Message.class)
 				.doInBackground(new Callback() {
 					@Override
@@ -260,7 +262,8 @@ public class LoginActivity extends BaseActivity {
 		FuliCenterApplication.getInstance().setPassword(currentPassword);
 		FuliCenterApplication.currentUserNick = user.getMUserNick();
 
-		new DownloadContactListTask(currentUsername,LoginActivity.this).execute();
+		new DownloadCollectCountTask(currentUsername,LoginActivity.this).execute();
+//		new DownloadContactListTask(currentUsername,LoginActivity.this).execute();
 		try {
 			// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
 			// ** manually load all local groups and
@@ -290,10 +293,7 @@ public class LoginActivity extends BaseActivity {
 			pd.dismiss();
 		}
 		// 进入主页面
-		Intent intent = new Intent(LoginActivity.this,
-				MainActivity.class);
-		startActivity(intent);
-
+//		startActivity(new Intent(LoginActivity.this, FulicenterMainActivity.class));
 		finish();
 	}
 
