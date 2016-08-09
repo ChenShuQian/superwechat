@@ -188,33 +188,71 @@ public class GoodDetailsActivity extends BaseActivity {
     private void setCollectOrCancel() {
         if (isCollect) {
             //取消收藏
-            OkHttpUtils2<MessageBean> utils2 = new OkHttpUtils2<MessageBean>();
-            utils2.setRequestUrl(I.REQUEST_DELETE_COLLECT)
-                    .addParam(I.Collect.USER_NAME, FuliCenterApplication.getInstance().getUserName())
-                    .addParam(I.Collect.GOODS_ID,String.valueOf(mGoodId))
-                    .targetClass(MessageBean.class)
-                    .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
-                        @Override
-                        public void onSuccess(MessageBean result) {
-                            Log.e(TAG, "result=" + result);
-                            if (result != null && result.isSuccess()) {
-                                new DownloadCollectCountTask(FuliCenterApplication.getInstance().getUserName(), GoodDetailsActivity.this).execute();
-                                isCollect = false;
-                            } else {
-                                Log.e(TAG, "删除失败");
-                            }
-                            setCollectPic();
-                            Toast.makeText(GoodDetailsActivity.this, result.getMsg(), Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            Log.e(TAG, "error=" + error);
-                        }
-                    });
+            noCollect();
         } else {
             //收藏
+            yesCollect();
         }
+    }
+
+    private void yesCollect() {
+        OkHttpUtils2<MessageBean> utils2 = new OkHttpUtils2<MessageBean>();
+        utils2.setRequestUrl(I.REQUEST_ADD_COLLECT)
+                .addParam(I.Collect.USER_NAME,FuliCenterApplication.getInstance().getUserName())
+                .addParam(I.Collect.GOODS_ID, String.valueOf(mGoodDetail.getGoodsId()))
+                .addParam(I.Collect.ADD_TIME, String.valueOf(mGoodDetail.getAddTime()))
+                .addParam(I.Collect.GOODS_ENGLISH_NAME,mGoodDetail.getGoodsEnglishName())
+                .addParam(I.Collect.GOODS_NAME,mGoodDetail.getGoodsName())
+                .addParam(I.Collect.GOODS_IMG,mGoodDetail.getGoodsImg())
+                .addParam(I.Collect.GOODS_THUMB,mGoodDetail.getGoodsThumb())
+                .targetClass(MessageBean.class)
+                .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        Log.e(TAG, "result=" + result);
+                        if (result != null && result.isSuccess()) {
+                            isCollect = true;
+                            new DownloadCollectCountTask(FuliCenterApplication.getInstance().getUserName(), GoodDetailsActivity.this).execute();
+                        } else {
+                            Log.e(TAG, "delete fail");
+                        }
+                        setCollectPic();
+                        Toast.makeText(GoodDetailsActivity.this, result.getMsg(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG, "error=" + error);
+                    }
+                });
+    }
+
+    private void noCollect() {
+        OkHttpUtils2<MessageBean> utils2 = new OkHttpUtils2<MessageBean>();
+        utils2.setRequestUrl(I.REQUEST_DELETE_COLLECT)
+                .addParam(I.Collect.USER_NAME, FuliCenterApplication.getInstance().getUserName())
+                .addParam(I.Collect.GOODS_ID,String.valueOf(mGoodId))
+                .targetClass(MessageBean.class)
+                .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        Log.e(TAG, "result=" + result);
+                        if (result != null && result.isSuccess()) {
+                            new DownloadCollectCountTask(FuliCenterApplication.getInstance().getUserName(), GoodDetailsActivity.this).execute();
+                            sendStickyBroadcast(new Intent("update_collect_list"));
+                            isCollect = false;
+                        } else {
+                            Log.e(TAG, "删除失败");
+                        }
+                        setCollectPic();
+                        Toast.makeText(GoodDetailsActivity.this, result.getMsg(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e(TAG, "error=" + error);
+                    }
+                });
     }
 
     private void setCollectPic() {
