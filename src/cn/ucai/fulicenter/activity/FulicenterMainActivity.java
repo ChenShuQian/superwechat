@@ -1,6 +1,9 @@
 package cn.ucai.fulicenter.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -11,6 +14,7 @@ import android.widget.TextView;
 
 import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.utils.Utils;
 
 public class FulicenterMainActivity extends BaseActivity{
     private static final String TAG = FulicenterMainActivity.class.getSimpleName();
@@ -37,6 +41,7 @@ public class FulicenterMainActivity extends BaseActivity{
         setContentView(R.layout.activity_fulicenter_main);
         initView();
         initFragment();
+        setListener();
         // 添加显示第一个fragment
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mNewGoodsFragment)
@@ -45,6 +50,10 @@ public class FulicenterMainActivity extends BaseActivity{
                 .hide(mBoutiqueFragment).hide(mCategoryFragment)
                 .show(mNewGoodsFragment)
                 .commit();
+    }
+
+    private void setListener() {
+        setUpdateCartCountReceiver();
     }
 
     private void initFragment() {
@@ -139,5 +148,35 @@ public class FulicenterMainActivity extends BaseActivity{
         setFragment();
         setRadioButtonStatus(currentIndex);
         Log.e(TAG, "index=" + index + ",currentIndex=" + currentIndex);
+    }
+
+    class UpdateCartCountReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int count = Utils.getCartCount();
+            if (!DemoHXSDKHelper.getInstance().isLogined() || count == 0) {
+                tvCartHint.setText(String.valueOf(0));
+                tvCartHint.setVisibility(View.GONE);
+            } else {
+                tvCartHint.setText(String.valueOf(count));
+                tvCartHint.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    UpdateCartCountReceiver mReceiver;
+
+    private void setUpdateCartCountReceiver() {
+        mReceiver = new UpdateCartCountReceiver();
+        IntentFilter filter = new IntentFilter("update_cart_list");
+        registerReceiver(mReceiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);
+        }
     }
 }

@@ -1,6 +1,9 @@
 package cn.ucai.fulicenter.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +27,7 @@ import cn.ucai.fulicenter.bean.GoodDetailsBean;
 import cn.ucai.fulicenter.bean.MessageBean;
 import cn.ucai.fulicenter.task.DownloadCollectCountTask;
 import cn.ucai.fulicenter.utils.OkHttpUtils2;
+import cn.ucai.fulicenter.utils.Utils;
 import cn.ucai.fulicenter.view.DisPlayUtils;
 import cn.ucai.fulicenter.view.FlowIndicator;
 import cn.ucai.fulicenter.view.SlideAutoLoopView;
@@ -58,6 +62,7 @@ public class GoodDetailsActivity extends BaseActivity {
         MyListener listener = new MyListener();
         ivCollect.setOnClickListener(listener);
         ivShare.setOnClickListener(listener);
+        setUpdateCartCountReceiver();
     }
 
     private void initData() {
@@ -82,6 +87,7 @@ public class GoodDetailsActivity extends BaseActivity {
                         if (s != null) {
                             Gson gson = new Gson();
                             mGoodDetail = gson.fromJson(s, GoodDetailsBean.class);
+                            Log.e(TAG, "mGoodDetail=" + mGoodDetail.getGoodsName());
                             showGoodDetail();
                         } else {
                             Toast.makeText(GoodDetailsActivity.this, "加载商品详情失败", Toast.LENGTH_SHORT);
@@ -215,7 +221,7 @@ public class GoodDetailsActivity extends BaseActivity {
                 .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
                     @Override
                     public void onSuccess(MessageBean result) {
-                        Log.e(TAG, "result=" + result);
+                        Log.e(TAG, "result=" + result.toString());
                         if (result != null && result.isSuccess()) {
                             isCollect = true;
                             new DownloadCollectCountTask(FuliCenterApplication.getInstance().getUserName(), GoodDetailsActivity.this).execute();
@@ -296,5 +302,34 @@ public class GoodDetailsActivity extends BaseActivity {
 
         // 启动分享GUI
         oks.show(this);
+    }
+
+    class UpdateCartCountReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int count = Utils.getCartCount();
+            if (!DemoHXSDKHelper.getInstance().isLogined() || count == 0) {
+                tvCartCount.setText(String.valueOf(0));
+                tvCartCount.setVisibility(View.GONE);
+            } else {
+                tvCartCount.setText(String.valueOf(count));
+                tvCartCount.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    UpdateCartCountReceiver mReceiver;
+    private void setUpdateCartCountReceiver() {
+        mReceiver = new UpdateCartCountReceiver();
+        IntentFilter filter = new IntentFilter("update_cart_list");
+        registerReceiver(mReceiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);
+        }
     }
 }

@@ -46,7 +46,7 @@ public class DownloadCartListTask {
                         Log.e(TAG, "s" + s);
                         if (s != null) {
                             ArrayList<CartBean> list = Utils.array2List(s);
-                            List<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
+                            final List<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
                             for (final CartBean cart : list) {
                                 if (!cartList.contains(cart)) {
                                     OkHttpUtils2<GoodDetailsBean> utils = new OkHttpUtils2<GoodDetailsBean>();
@@ -57,6 +57,8 @@ public class DownloadCartListTask {
                                                 @Override
                                                 public void onSuccess(GoodDetailsBean result) {
                                                     cart.setGoods(result);
+                                                    cartList.add(cart);
+                                                    Log.e(TAG, "cart=" + cart.toString());
                                                 }
 
                                                 @Override
@@ -64,7 +66,6 @@ public class DownloadCartListTask {
                                                     Log.e(TAG, "error" + error);
                                                 }
                                             });
-                                    cartList.add(cart);
                                 } else {
                                     cartList.get(cartList.indexOf(cart)).setChecked(cart.isChecked());
                                     cartList.get(cartList.indexOf(cart)).setCount(cart.getCount());

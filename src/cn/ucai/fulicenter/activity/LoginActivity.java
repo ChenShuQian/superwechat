@@ -263,6 +263,7 @@ public class LoginActivity extends BaseActivity {
 		FuliCenterApplication.currentUserNick = user.getMUserNick();
 
 		new DownloadCollectCountTask(currentUsername,LoginActivity.this).execute();
+		new DownloadContactListTask(currentUsername,LoginActivity.this).execute();
 //		new DownloadContactListTask(currentUsername,LoginActivity.this).execute();
 		try {
 			// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
