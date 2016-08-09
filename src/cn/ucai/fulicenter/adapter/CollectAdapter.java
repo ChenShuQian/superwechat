@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,13 +18,17 @@ import java.util.Comparator;
 import java.util.List;
 
 import cn.ucai.fulicenter.D;
+import cn.ucai.fulicenter.FuliCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.activity.GoodDetailsActivity;
 import cn.ucai.fulicenter.bean.CollectBean;
+import cn.ucai.fulicenter.bean.MessageBean;
 import cn.ucai.fulicenter.bean.NewGoodBean;
 import cn.ucai.fulicenter.footer.FooterHolder;
+import cn.ucai.fulicenter.task.DownloadCollectCountTask;
 import cn.ucai.fulicenter.utils.ImageUtils;
+import cn.ucai.fulicenter.utils.OkHttpUtils2;
 
 /**
  * Created by sks on 2016/8/1.
@@ -31,7 +36,7 @@ import cn.ucai.fulicenter.utils.ImageUtils;
 public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = CollectAdapter.class.getSimpleName();
     Context mContext;
-    List<CollectBean> mNewGoodsList;
+    List<CollectBean> mCollectList;
     boolean isMore;
     final static int FooterType = 0;
     final static int ItemType = 1;
@@ -58,8 +63,8 @@ public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public CollectAdapter(Context context, List<CollectBean> list) {
         mContext = context;
-        mNewGoodsList = new ArrayList<>();
-        mNewGoodsList.addAll(list);
+        mCollectList = new ArrayList<>();
+        mCollectList.addAll(list);
         sortBy = I.SORT_BY_ADDTIME_DESC;
     }
 
@@ -74,7 +79,7 @@ public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 holder = new FooterHolder(view);
                 break;
             case ItemType:
-                view = LayoutInflater.from(mContext).inflate(R.layout.new_good, parent, false);
+                view = LayoutInflater.from(mContext).inflate(R.layout.item_collect, parent, false);
                 holder = new GoodViewHolder(view);
                 break;
         }
@@ -87,13 +92,13 @@ public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ((FooterHolder) holder).tvFooterText.setText(FooterText);
             return;
         }
-        CollectBean newGoodBean = mNewGoodsList.get(position);
+        final CollectBean collectBean = mCollectList.get(position);
         GoodViewHolder viewHolder = (GoodViewHolder) holder;
-        final CollectBean good = mNewGoodsList.get(position);
+        final CollectBean good = mCollectList.get(position);
         Log.e(TAG, "good="+good.toString());
         Log.e(TAG, "GoodsThumb="+good.getGoodsThumb());
         ImageUtils.setGoodThumb(mContext,viewHolder.ivGoodThumb,good.getGoodsThumb());
-        viewHolder.tvGoodName.setText(newGoodBean.getGoodsName());
+        viewHolder.tvGoodName.setText(collectBean.getGoodsName());
         viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,12 +106,41 @@ public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .putExtra(D.GoodDetails.KEY_GOODS_ID,good.getGoodsId()));
             }
         });
+        viewHolder.ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OkHttpUtils2<MessageBean> utils2 = new OkHttpUtils2<MessageBean>();
+                utils2.setRequestUrl(I.REQUEST_DELETE_COLLECT)
+                        .addParam(I.Collect.USER_NAME, FuliCenterApplication.getInstance().getUserName())
+                        .addParam(I.Collect.GOODS_ID,String.valueOf(collectBean.getGoodsId()))
+                        .targetClass(MessageBean.class)
+                        .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
+                            @Override
+                            public void onSuccess(MessageBean result) {
+                                Log.e(TAG, "result=" + result);
+                                if (result != null && result.isSuccess()) {
+                                    mCollectList.remove(collectBean);
+                                    new DownloadCollectCountTask(FuliCenterApplication.getInstance().getUserName(), mContext).execute();
+                                    notifyDataSetChanged();
+                                } else {
+                                    Log.e(TAG, "删除失败");
+                                }
+                                Toast.makeText(mContext, result.getMsg(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                Log.e(TAG, "error=" + error);
+                            }
+                        });
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
 //        return mNewGoodsList.size();
-        return mNewGoodsList==null?1:mNewGoodsList.size()+1;
+        return mCollectList==null?1:mCollectList.size()+1;
     }
 
     @Override
@@ -120,13 +154,13 @@ public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public void initData(List<CollectBean> list) {
         Log.e(TAG, "list=" + list.toString());
-        mNewGoodsList.clear();
-        mNewGoodsList.addAll(list);
+        mCollectList.clear();
+        mCollectList.addAll(list);
         notifyDataSetChanged();
     }
 
     public void addAllList(List<CollectBean> newGoodList) {
-        mNewGoodsList.addAll(newGoodList);
+        mCollectList.addAll(newGoodList);
     }
 
     class GoodViewHolder extends RecyclerView.ViewHolder {
