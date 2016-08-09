@@ -32,13 +32,17 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
+    <!-- 蓝牙分享所需的权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
     <permission
         android:name="cn.ucai.fulicenter.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="cn.ucai.fulicenter.permission.C2D_MESSAGE" />
 
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".FuliCenterApplication"
@@ -107,45 +111,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateVisible" />
-        <!-- 群组详情 -->
-        <activity
-            android:name=".activity.GroupDetailsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" />
-        <!-- 群组列表 -->
-        <activity
-            android:name=".activity.GroupsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".activity.ChatRoomActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" />
-        <!-- 聊天室详情 -->
-        <activity
-            android:name=".activity.ChatRoomDetailsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" />
-
-        <!-- 新建群组 -->
-        <activity
-            android:name=".activity.NewGroupActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" />
-        <!-- 退出群组提示框 -->
-        <activity
-            android:name=".activity.ExitGroupDialog"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyDialogStyleBottom" />
-        <!-- 群组选人 -->
-        <activity
-            android:name=".activity.GroupPickContactsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" />
         <!-- 地图 -->
         <activity
             android:name=".activity.BaiduMapActivity"
@@ -189,12 +154,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
 
-        <!-- 公开的群聊列表 -->
-        <activity
-            android:name=".activity.PublicGroupsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.PublicChatRoomsActivity"
             android:screenOrientation="portrait"
@@ -212,20 +171,6 @@
             android:name=".activity.VideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" />
-        <!-- 群聊简单信息 -->
-        <activity
-            android:name=".activity.GroupSimpleDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" />
-        <!-- 群组黑名单用户列表 -->
-        <activity
-            android:name=".activity.GroupBlacklistActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" />
-        <activity
-            android:name=".activity.PublicGroupsSeachActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
         <activity
@@ -347,9 +292,39 @@
         <activity android:name=".activity.FulicenterMainActivity"
             android:theme="@style/horizontal_slide"/>
         <activity android:name=".activity.BoutiqueSortActivity"
-            android:theme="@style/horizontal_slide"></activity>
+            android:theme="@style/horizontal_slide"/>
         <activity android:name=".activity.CategoryChildActivity"
-            android:theme="@style/horizontal_slide"></activity>
+            android:theme="@style/horizontal_slide"/>
+
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
+
+            <intent-filter>
+                <data android:scheme="tencent100371282" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- 调用新浪原生SDK，需要注册的回调activity -->
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!--微信分享回调 -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>
