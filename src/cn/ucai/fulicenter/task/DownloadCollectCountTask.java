@@ -39,9 +39,13 @@ public class DownloadCollectCountTask {
                     public void onSuccess(MessageBean msg) {
                         Log.e(TAG, "s" + msg);
                         if (msg != null) {
-                            FuliCenterApplication.getInstance().setCollectCount(Integer.valueOf(msg.getMsg()));
+                            if (msg.isSuccess()) {
+                                FuliCenterApplication.getInstance().setCollectCount(Integer.valueOf(msg.getMsg()));
+                            } else {
+                                FuliCenterApplication.getInstance().setCollectCount(0);
+                            }
                         } else {
-                            FuliCenterApplication.getInstance().setCollectCount(0);
+                            Log.e(TAG, "s" + msg);
                         }
                         mContext.sendStickyBroadcast(new Intent("update_collect"));
                     }
