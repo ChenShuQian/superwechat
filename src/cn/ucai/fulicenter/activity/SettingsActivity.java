@@ -41,6 +41,7 @@ import cn.ucai.fulicenter.Constant;
 import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.DemoHXSDKModel;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.task.DownloadCartListTask;
 
 /**
  * 设置界面
@@ -357,6 +358,7 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 				FuliCenterApplication.getInstance().getUserList().clear();
 				FuliCenterApplication.getInstance().getCartList().clear();
 				FuliCenterApplication.getInstance().setCollectCount(0);
+				sendStickyBroadcast(new Intent("update_cart_list"));
 				pd.dismiss();
 				// 重新显示登陆页面
 				finish();
