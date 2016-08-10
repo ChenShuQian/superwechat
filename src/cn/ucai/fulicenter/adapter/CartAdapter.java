@@ -7,8 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.GoodDetailsBean;
 import cn.ucai.fulicenter.bean.NewGoodBean;
 import cn.ucai.fulicenter.footer.FooterHolder;
+import cn.ucai.fulicenter.task.UpdateCartTask;
 import cn.ucai.fulicenter.utils.ImageUtils;
 
 /**
@@ -61,20 +65,29 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        CartBean goodDetails = mNewGoodsList.get(position);
         GoodViewHolder viewHolder = (GoodViewHolder) holder;
         final CartBean good = mNewGoodsList.get(position);
+        Log.e(TAG, "good=" + good);
         ImageUtils.setGoodThumb(mContext,viewHolder.iv_cart_thumb,good.getGoods().getGoodsThumb());
-        viewHolder.tv_cart_goodname.setText(goodDetails.getGoods().getGoodsName());
-        viewHolder.tv_cart_good_count.setText(goodDetails.getCount());
-        viewHolder.tv_cart_price.setText(goodDetails.getGoods().getCurrencyPrice());
-        viewHolder.layout_good.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tv_cart_goodname.setText(good.getGoods().getGoodsName());
+        viewHolder.tv_cart_good_count.setText("("+good.getCount()+")");
+        viewHolder.tv_cart_price.setText(good.getGoods().getCurrencyPrice());
+        viewHolder.iv_cart_thumb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mContext.startActivity(new Intent(mContext, GoodDetailsActivity.class)
                 .putExtra(D.GoodDetails.KEY_GOODS_ID,good.getGoodsId()));
             }
         });
+        viewHolder.cb_cart_checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                good.setChecked(b);
+                new UpdateCartTask(mContext, good).execute();
+            }
+        });
+        viewHolder.iv_cart_add.setOnClickListener(new UpdateCartCountListener(good,1));
+        viewHolder.iv_cart_delete.setOnClickListener(new UpdateCartCountListener(good,-1));
     }
 
     @Override
@@ -95,19 +108,42 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     class GoodViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout layout_good;
+        RelativeLayout layout_good;
         ImageView iv_cart_thumb;
         TextView tv_cart_goodname;
         TextView tv_cart_good_count;
         TextView tv_cart_price;
+        CheckBox cb_cart_checkbox;
+        ImageView iv_cart_add;
+        ImageView iv_cart_delete;
 
         public GoodViewHolder(View itemView) {
             super(itemView);
-            layout_good = (LinearLayout) itemView.findViewById(R.id.layout_good);
+            layout_good = (RelativeLayout) itemView.findViewById(R.id.layout_good);
             iv_cart_thumb = (ImageView) itemView.findViewById(R.id.iv_cart_thumb);
             tv_cart_goodname = (TextView) itemView.findViewById(R.id.tv_cart_goodname);
             tv_cart_good_count = (TextView) itemView.findViewById(R.id.tv_cart_good_count);
             tv_cart_price = (TextView) itemView.findViewById(R.id.tv_cart_price);
+            cb_cart_checkbox = (CheckBox) itemView.findViewById(R.id.cb_cart_checkbox);
+            iv_cart_add = (ImageView) itemView.findViewById(R.id.iv_cart_add);
+            iv_cart_delete = (ImageView) itemView.findViewById(R.id.iv_cart_delete);
         }
     }
+
+    class UpdateCartCountListener implements View.OnClickListener {
+        CartBean cart;
+        int count;
+
+        public UpdateCartCountListener(CartBean good,int cart) {
+            this.cart = good;
+            this.count = cart;
+        }
+
+        @Override
+        public void onClick(View view) {
+            cart.setCount(cart.getCount()+count);
+            new UpdateCartTask(mContext, cart).execute();
+        }
+    }
+
 }

@@ -42,6 +42,8 @@ import cn.ucai.fulicenter.DemoHXSDKHelper;
 import cn.ucai.fulicenter.DemoHXSDKModel;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.task.DownloadCartListTask;
+import cn.ucai.fulicenter.task.DownloadCollectCountTask;
+import cn.ucai.fulicenter.task.DownloadContactListTask;
 
 /**
  * 设置界面

@@ -99,6 +99,8 @@ public class SplashActivity extends BaseActivity {
 //					new DownloadContactListTask(username,SplashActivity.this).execute();
 					new DownloadCollectCountTask(username,SplashActivity.this).execute();
 					new DownloadCartListTask(username,SplashActivity.this).execute();
+					new DownloadContactListTask(username,SplashActivity.this).execute();
+
 					long costTime = System.currentTimeMillis() - start;
 					//等待sleeptime时长
 					if (sleepTime - costTime > 0) {
