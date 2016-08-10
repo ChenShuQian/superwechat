@@ -43,13 +43,13 @@ public class DownloadCartListTask {
                 .execute(new OkHttpUtils2.OnCompleteListener<CartBean[]>() {
                     @Override
                     public void onSuccess(CartBean[] s) {
-                        Log.e(TAG, "s" + s);
+                        Log.e(TAG, "s" + s.toString());
                         if (s != null) {
                             ArrayList<CartBean> list = Utils.array2List(s);
-                            final List<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
+                            List<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
                             for (final CartBean cart : list) {
                                 if (!cartList.contains(cart)) {
-                                    OkHttpUtils2<GoodDetailsBean> utils = new OkHttpUtils2<GoodDetailsBean>();
+                                    OkHttpUtils2<GoodDetailsBean> utils = new OkHttpUtils2<>();
                                     utils.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
                                             .addParam(D.GoodDetails.KEY_GOODS_ID, String.valueOf(cart.getGoodsId()))
                                             .targetClass(GoodDetailsBean.class)
@@ -57,8 +57,7 @@ public class DownloadCartListTask {
                                                 @Override
                                                 public void onSuccess(GoodDetailsBean result) {
                                                     cart.setGoods(result);
-                                                    cartList.add(cart);
-                                                    Log.e(TAG, "cart=" + cart.toString());
+                                                    mContext.sendStickyBroadcast(new Intent("update_cart_list"));
                                                 }
 
                                                 @Override
@@ -66,12 +65,13 @@ public class DownloadCartListTask {
                                                     Log.e(TAG, "error" + error);
                                                 }
                                             });
+                                    cartList.add(cart);
                                 } else {
                                     cartList.get(cartList.indexOf(cart)).setChecked(cart.isChecked());
                                     cartList.get(cartList.indexOf(cart)).setCount(cart.getCount());
                                 }
-                                mContext.sendStickyBroadcast(new Intent("update_cart_list"));
                             }
+                            mContext.sendStickyBroadcast(new Intent("update_cart_list"));
                         }
                     }
 
