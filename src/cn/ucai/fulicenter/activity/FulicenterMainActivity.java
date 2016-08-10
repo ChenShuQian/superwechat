@@ -25,7 +25,8 @@ public class FulicenterMainActivity extends BaseActivity{
     RadioButton rbPerson;
     TextView tvCartHint;
     RadioButton[] mrbTabs;
-    int ACTION_LOGIN = 100;
+    int ACTION_LOGIN_PERSON = 100;
+    int ACTION_LOGIN_CART = 200;
     int index;
     int currentIndex;
     NewGoodsFragment mNewGoodsFragment;
@@ -92,13 +93,17 @@ public class FulicenterMainActivity extends BaseActivity{
                 index = 2;
                 break;
             case R.id.rbCart:
-                index = 3;
+                if (DemoHXSDKHelper.getInstance().isLogined()) {
+                    index = 3;
+                } else {
+                    startActivityForResult(new Intent(this, LoginActivity.class),ACTION_LOGIN_CART);
+                }
                 break;
             case R.id.rbPerson:
                 if (DemoHXSDKHelper.getInstance().isLogined()) {
                     index = 4;
                 } else {
-                    startActivityForResult(new Intent(this, LoginActivity.class),ACTION_LOGIN);
+                    startActivityForResult(new Intent(this, LoginActivity.class),ACTION_LOGIN_PERSON);
                 }
                 break;
         }
@@ -132,9 +137,12 @@ public class FulicenterMainActivity extends BaseActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ACTION_LOGIN) {
-            if (DemoHXSDKHelper.getInstance().isLogined()) {
+        if (DemoHXSDKHelper.getInstance().isLogined()) {
+            if (requestCode == ACTION_LOGIN_PERSON) {
                 index = 4;
+            }
+            if (requestCode == ACTION_LOGIN_CART) {
+                index = 3;
             }
         }
     }
@@ -154,6 +162,7 @@ public class FulicenterMainActivity extends BaseActivity{
         @Override
         public void onReceive(Context context, Intent intent) {
             int count = Utils.getCartCount();
+            Log.e(TAG, "count="+count);
             if (!DemoHXSDKHelper.getInstance().isLogined() || count == 0) {
                 tvCartHint.setText(String.valueOf(0));
                 tvCartHint.setVisibility(View.GONE);

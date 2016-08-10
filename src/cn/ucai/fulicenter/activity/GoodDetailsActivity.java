@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.util.List;
+
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.ucai.fulicenter.D;
@@ -23,9 +25,11 @@ import cn.ucai.fulicenter.FuliCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.bean.AlbumsBean;
+import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.GoodDetailsBean;
 import cn.ucai.fulicenter.bean.MessageBean;
 import cn.ucai.fulicenter.task.DownloadCollectCountTask;
+import cn.ucai.fulicenter.task.UpdateCartTask;
 import cn.ucai.fulicenter.utils.OkHttpUtils2;
 import cn.ucai.fulicenter.utils.Utils;
 import cn.ucai.fulicenter.view.DisPlayUtils;
@@ -62,6 +66,7 @@ public class GoodDetailsActivity extends BaseActivity {
         MyListener listener = new MyListener();
         ivCollect.setOnClickListener(listener);
         ivShare.setOnClickListener(listener);
+        ivCart.setOnClickListener(listener);
         setUpdateCartCountReceiver();
     }
 
@@ -192,6 +197,31 @@ public class GoodDetailsActivity extends BaseActivity {
                     break;
                 case R.id.iv_good_share:
                     showShare();
+                    break;
+                case R.id.iv_good_cart:
+                    if (DemoHXSDKHelper.getInstance().isLogined()) {
+                        List<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
+                        CartBean cartBean = new CartBean();
+                        boolean isFind = false;
+                        for (CartBean cart : cartList) {
+                            if (cart.getGoodsId() == mGoodDetail.getGoodsId()) {
+                                cartBean.setId(mGoodDetail.getId());
+                                cartBean.setCount(cart.getCount() + 1);
+                                cart.setChecked(cart.isChecked());
+                                new UpdateCartTask(GoodDetailsActivity.this, cart).execute();
+                                isFind = true;
+                            }
+                        }
+                        if (!isFind) {
+                            cartBean.setGoodsId(mGoodDetail.getGoodsId());
+                            cartBean.setUserName(FuliCenterApplication.getInstance().getUserName());
+                            cartBean.setChecked(true);
+                            cartBean.setCount(1);
+                            new UpdateCartTask(GoodDetailsActivity.this, cartBean).execute();
+                        }
+                    } else {
+                        startActivity(new Intent(GoodDetailsActivity.this,LoginActivity.class));
+                    }
                     break;
             }
         }
